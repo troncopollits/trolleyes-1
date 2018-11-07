@@ -13,7 +13,6 @@ import net.daw.connection.publicinterface.ConnectionInterface;
 import net.daw.constant.ConnectionConstants;
 import net.daw.dao.TipousuarioDao;
 import net.daw.factory.ConnectionFactory;
-import net.daw.helper.EncodingHelper;
 
 public class TipousuarioService {
 

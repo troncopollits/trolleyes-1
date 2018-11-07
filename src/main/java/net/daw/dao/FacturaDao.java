@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import net.daw.bean.FacturaBean;
-import net.daw.bean.TipousuarioBean;
 
 /**
  *

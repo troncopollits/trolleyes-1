@@ -8,6 +8,17 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>trolleyes01</name>
 	<url>http://maven.apache.org</url>
+	<!-- <properties>
+		<javaee.version>7.0</javaee.version>
+	</properties>
+	
+		https://mvnrepository.com/artifact/javax/javaee-api 
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>${javaee.version}</version>
+			<scope>provided</scope>
+		</dependency> -->
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>

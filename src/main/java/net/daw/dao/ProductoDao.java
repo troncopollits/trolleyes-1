@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import net.daw.bean.ProductoBean;
-import net.daw.bean.ProductoBean;
 
 /**
  *
@@ -39,12 +38,12 @@ public class ProductoDao {
 			if (oResultSet.next()) {
 				oProductoBean = new ProductoBean();
 				oProductoBean.setId(oResultSet.getInt("id"));
-                                oProductoBean.setCodigo(oResultSet.getString("codigo"));
-                                oProductoBean.setDesc(oResultSet.getString("desc"));
+                oProductoBean.setCodigo(oResultSet.getString("codigo"));
+                oProductoBean.setDesc(oResultSet.getString("desc"));
 				oProductoBean.setExistencias(oResultSet.getInt("existencias"));
-                                oProductoBean.setPrecio(oResultSet.getFloat("precio"));
-                                oProductoBean.setFoto(oResultSet.getString("foto"));
-                                oProductoBean.setId_tipoProducto(oResultSet.getInt("id_tipoProducto"));
+                oProductoBean.setPrecio(oResultSet.getFloat("precio"));
+                oProductoBean.setFoto(oResultSet.getString("foto"));
+                oProductoBean.setId_tipoProducto(oResultSet.getInt("id_tipoProducto"));
 			} else {
 				oProductoBean= null;
 			}
@@ -103,37 +102,37 @@ public class ProductoDao {
 		return res;
 	}
 
-	public ProductoBean create(ProductoBean oProductoBean) throws Exception {
-		String strSQL = "INSERT INTO " + ob + " (`id`, `codigo`, `desc`, `existencias`, `precio`, `foto`, `id_tipoProducto`) VALUES (NULL, ?,?,?,?,?,?); ";
-		ResultSet oResultSet = null;
-		PreparedStatement oPreparedStatement = null;
-		try {
-			oPreparedStatement = oConnection.prepareStatement(strSQL);
-			oPreparedStatement.setString(1, oProductoBean.getCodigo());
-                        oPreparedStatement.setString(2, oProductoBean.getDesc());
-                        oPreparedStatement.setInt(3, oProductoBean.getExistencias());
-                        oPreparedStatement.setFloat(4, oProductoBean.getPrecio());
-                        oPreparedStatement.setString(5, oProductoBean.getFoto());
-                        oPreparedStatement.setInt(6, oProductoBean.getId_tipoProducto());
-			oPreparedStatement.executeUpdate();
-			oResultSet = oPreparedStatement.getGeneratedKeys();
-			if (oResultSet.next()) {
-				oProductoBean.setId(oResultSet.getInt(1));
-			} else {
-				oProductoBean.setId(0);
-			}
-		} catch (SQLException e) {
-			throw new Exception("Error en Dao create de " + ob, e);
-		} finally {
-			if (oResultSet != null) {
-				oResultSet.close();
-			}
-			if (oPreparedStatement != null) {
-				oPreparedStatement.close();
-			}
-		}
-		return oProductoBean;
-	}
+	 public ProductoBean create(ProductoBean oProductoBean) throws Exception {
+	        String strSQL = "INSERT INTO " + ob + " (`id`, `codigo`, `desc`, `existencias`, `precio`, `foto`, `id_tipoProducto`) VALUES (NULL, ?,?,?,?,?,?); ";
+	        ResultSet oResultSet = null;
+	        PreparedStatement oPreparedStatement = null;
+	        try {
+	            oPreparedStatement = oConnection.prepareStatement(strSQL);
+	            oPreparedStatement.setString(1, oProductoBean.getCodigo());
+	            oPreparedStatement.setString(2, oProductoBean.getDesc());
+	            oPreparedStatement.setInt(3, oProductoBean.getExistencias());
+	            oPreparedStatement.setFloat(4, oProductoBean.getPrecio());
+	            oPreparedStatement.setString(5, oProductoBean.getFoto());
+	            oPreparedStatement.setInt(6, oProductoBean.getId_tipoProducto());
+	            oPreparedStatement.executeUpdate();
+	            oResultSet = oPreparedStatement.getGeneratedKeys();
+	            if (oResultSet.next()) {
+	                oProductoBean.setId(oResultSet.getInt(1));
+	            } else {
+	                oProductoBean.setId(0);
+	            }
+	        } catch (SQLException e) {
+	            throw new Exception("Error en Dao create de " + ob, e);
+	        } finally {
+	            if (oResultSet != null) {
+	                oResultSet.close();
+	            }
+	            if (oPreparedStatement != null) {
+	                oPreparedStatement.close();
+	            }
+	        }
+	        return oProductoBean;
+	    }
 
 	public int update(ProductoBean oProductoBean) throws Exception {
 		int iResult = 0;

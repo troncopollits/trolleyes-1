@@ -4,6 +4,9 @@ package net.daw.service;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import javax.servlet.http.HttpServletRequest;
 import net.daw.bean.ReplyBean;
 import net.daw.bean.ProductoBean;
@@ -13,9 +16,8 @@ import net.daw.dao.ProductoDao;
 import net.daw.factory.ConnectionFactory;
 import net.daw.helper.EncodingHelper;
 
-
 public class ProductoService {
-    HttpServletRequest oRequest;
+	HttpServletRequest oRequest;
 	String ob = null;
 
 	public ProductoService(HttpServletRequest oRequest) {
@@ -91,22 +93,66 @@ public class ProductoService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
+		// Lista que contendrá los productos creados aleatoriamente
+		ArrayList<ProductoBean> listaProductoBean = new ArrayList<ProductoBean>();
 		try {
-			String strJsonFromClient = oRequest.getParameter("json");
+			listaProductoBean = crearDatos();
+
+			// String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
 			ProductoBean oProductoBean = new ProductoBean();
-			oProductoBean = oGson.fromJson(strJsonFromClient, ProductoBean.class);
+			// oProductoBean = oGson.fromJson(strJsonFromClient, ProductoBean.class);
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			ProductoDao oProductoDao = new ProductoDao(oConnection, ob);
-			oProductoBean = oProductoDao.create(oProductoBean);
-			oReplyBean = new ReplyBean(200, oGson.toJson(oProductoBean));
+
+			for (ProductoBean productos : listaProductoBean) {
+				oProductoBean = oProductoDao.create(productos);
+			}
+			// oProductoBean = oProductoDao.create(oProductoBean);
+			// oReplyBean = new ReplyBean(200, oGson.toJson(oProductoBean));
+			oReplyBean = new ReplyBean(200, oGson.toJson("Productos creados correctamente"));
 		} catch (Exception ex) {
-			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
+			oReplyBean = new ReplyBean(500,"ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
 		} finally {
 			oConnectionPool.disposeConnection();
 		}
 		return oReplyBean;
+	}
+
+	// Metodo para crear varios productos de manera aleatoria
+	public ArrayList<ProductoBean> crearDatos() {
+		ArrayList<ProductoBean> listaRandomProducto = new ArrayList<ProductoBean>();
+		Random randomDesc = new Random();
+		Random randomTipoProducto = new Random();
+		Random randomCodigo = new Random();
+		ProductoBean oProductoBean;
+
+		String[] desc = { "Arroz", "Fideos", "Macarrones", "Huevos", "Leche", "Pechuga Pollo", "Pechuga pavo",
+				"Solomillo", "Conejo", "Sardina", "Yogur", "Pizza", "Flan", "Mazorca Maiz", "Pepino", "Manzana",
+				"Platano", "Tupu" };
+		Integer[] tipoProducto = { 1, 2, 3, 4, 5 };
+		String[] codigo = { "8a7ddff", "7as9d", "dasf77sf", "987dff", "cs9df", "1d7fsaf9", "7sdfw8ef", "68fsadf8",
+				"6asd7", "894xa9" };
+
+		for (int i = 0; i < 6; i++) {
+			oProductoBean = new ProductoBean();
+			int randDesc = randomDesc.nextInt(20);
+			int randTipoProducto = randomTipoProducto.nextInt(5);
+			int randCodigo = randomCodigo.nextInt(10);
+			int existencias = ThreadLocalRandom.current().nextInt(0, 3000 + 1);
+			double precio = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
+
+			oProductoBean.setDesc(desc[randDesc]);
+			oProductoBean.setId_tipoProducto(tipoProducto[randTipoProducto]);
+			oProductoBean.setCodigo(codigo[randCodigo]);
+			oProductoBean.setExistencias(existencias);
+			oProductoBean.setPrecio((float) precio);
+			
+			listaRandomProducto.add(oProductoBean);
+
+		}
+		return listaRandomProducto;
 	}
 
 	public ReplyBean update() throws Exception {
@@ -123,8 +169,8 @@ public class ProductoService {
 			oConnection = oConnectionPool.newConnection();
 			ProductoDao oProductoDao = new ProductoDao(oConnection, ob);
 			iRes = oProductoDao.update(oProductoBean);
-			oReplyBean.setStatus(200);
-			oReplyBean.setJson(Integer.toString(iRes));
+			//oReplyBean.setStatus(200);
+			//oReplyBean.setJson(Integer.toString(iRes));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
 		} finally {

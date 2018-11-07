@@ -11,13 +11,10 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import net.daw.bean.LineaBean;
 import net.daw.bean.ReplyBean;
-import net.daw.bean.TipousuarioBean;
 import net.daw.connection.publicinterface.ConnectionInterface;
 import net.daw.constant.ConnectionConstants;
 import net.daw.dao.LineaDao;
-import net.daw.dao.TipousuarioDao;
 import net.daw.factory.ConnectionFactory;
-import net.daw.helper.EncodingHelper;
 
 public class LineaService {
     HttpServletRequest oRequest;
@@ -128,8 +125,8 @@ public class LineaService {
 			oConnection = oConnectionPool.newConnection();
 			LineaDao oLineaDao = new LineaDao(oConnection, ob);
 			iRes = oLineaDao.update(oLineaBean);
-			oReplyBean.setStatus(200);
-			oReplyBean.setJson(Integer.toString(iRes));
+			//oReplyBean.setStatus(200);
+			//oReplyBean.setJson(Integer.toString(iRes));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
 		} finally {

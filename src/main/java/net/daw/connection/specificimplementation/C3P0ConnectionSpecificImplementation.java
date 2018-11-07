@@ -3,8 +3,6 @@ package net.daw.connection.specificimplementation;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import net.daw.connection.publicinterface.ConnectionInterface;
