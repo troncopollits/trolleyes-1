@@ -103,6 +103,7 @@ public class ProductoDao {
 	}
 
 	public ProductoBean create(ProductoBean oProductoBean) throws Exception {
+		
 		String strSQL = "INSERT INTO " + ob
 				+ " (`id`, `codigo`, `desc`, `existencias`, `precio`, `foto`, `id_tipoProducto`) VALUES (NULL, ?,?,?,?,?,?); ";
 		ResultSet oResultSet = null;
