@@ -93,7 +93,7 @@ public class ProductoService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		// Lista que contendr� los productos creados aleatoriamente
+		// Lista que contendra los productos creados aleatoriamente
 		ArrayList<ProductoBean> listaProductoBean = new ArrayList<ProductoBean>();
 		try {
 			listaProductoBean = crearDatos();
@@ -126,6 +126,7 @@ public class ProductoService {
 		Random randomDesc = new Random();
 		Random randomTipoProducto = new Random();
 		Random randomCodigo = new Random();
+		String foto = "foto";
 		ProductoBean oProductoBean;
 
 		String[] desc = { "Arroz", "Fideos", "Macarrones", "Huevos", "Leche", "Pechuga Pollo", "Pechuga pavo",
@@ -148,7 +149,7 @@ public class ProductoService {
 			oProductoBean.setCodigo(codigo[randCodigo]);
 			oProductoBean.setExistencias(existencias);
 			oProductoBean.setPrecio((float) precio);
-			
+			oProductoBean.setFoto(foto);
 			listaRandomProducto.add(oProductoBean);
 
 		}
@@ -201,28 +202,4 @@ public class ProductoService {
 		return oReplyBean;
 
 	}
-	
-	public ReplyBean loaddata() throws Exception {
-        ReplyBean oReplyBean;
-        ConnectionInterface oConnectionPool = null;
-        Connection oConnection;
-        ArrayList<ProductoBean> productos = new ArrayList<>();
-        RellenarService oRellenarService = new RellenarService();
-        try {
-            Integer number = Integer.parseInt(oRequest.getParameter("number"));
-            oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
-            oConnection = oConnectionPool.newConnection();
-            ProductoDao oProductoDao = new ProductoDao(oConnection, ob);
-            productos = oRellenarService.RellenarProducto(number);
-            for (ProductoBean producto : productos) {
-                oProductoDao.create(producto);
-            }
-            Gson oGson = new Gson();
-            oReplyBean = new ReplyBean(200, oGson.toJson("Productos creados: " + number));
-        } catch (Exception ex) {
-            oReplyBean = new ReplyBean(500,
-                    "ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
-        }
-        return oReplyBean;
-    }
 }

@@ -18,7 +18,7 @@ import net.daw.helper.JsonHelper;
  * Servlet implementation class json
  */
 public class json extends HttpServlet {
-/*Comentario*/
+	/* Comentario */
 	private static final long serialVersionUID = 1L;
 
 	/**
