@@ -93,7 +93,7 @@ public class ProductoService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		// Lista que contendrï¿½ los productos creados aleatoriamente
+		// Lista que contendra los productos creados aleatoriamente
 		ArrayList<ProductoBean> listaProductoBean = new ArrayList<ProductoBean>();
 		try {
 			listaProductoBean = crearDatos();
@@ -113,42 +113,61 @@ public class ProductoService {
 			// oReplyBean = new ReplyBean(200, oGson.toJson(oProductoBean));
 			oReplyBean = new ReplyBean(200, oGson.toJson("Productos creados correctamente"));
 		} catch (Exception ex) {
-			oReplyBean = new ReplyBean(500,"ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
+			oReplyBean = new ReplyBean(500,
+					"ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
 		} finally {
 			oConnectionPool.disposeConnection();
 		}
 		return oReplyBean;
 	}
 
+	/*
+	 * public ReplyBean cargarProductos()throws Exception{ ReplyBean oReplyBean;
+	 * ConnectionInterface oConnectionPool = null; Connection oConnection;
+	 * RellenarService rellenar = new RellenarService(); try { Integer numero =
+	 * Integer.parseInt(oRequest.getParameter("numero")); oConnectionPool =
+	 * ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+	 * oConnection = oConnectionPool.newConnection(); ProductoDao oProductoDao = new
+	 * ProductoDao(oConnection, ob); ArrayList<ProductoBean> alProductoBean =
+	 * rellenar.fillProducto(numero);
+	 * 
+	 * for(ProductoBean productos : alProductoBean){ oProductoDao.create(productos);
+	 * } Gson oGson = new Gson(); oReplyBean = new ReplyBean(200,
+	 * oGson.toJson(alProductoBean)); } catch (Exception ex) { oReplyBean = new
+	 * ReplyBean(500, "ERROR: " +
+	 * EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage()))); }
+	 * finally { oConnectionPool.disposeConnection(); } }
+	 */
 	// Metodo para crear varios productos de manera aleatoria
 	public ArrayList<ProductoBean> crearDatos() {
 		ArrayList<ProductoBean> listaRandomProducto = new ArrayList<ProductoBean>();
 		Random randomDesc = new Random();
 		Random randomTipoProducto = new Random();
 		Random randomCodigo = new Random();
+		String foto = "foto";
 		ProductoBean oProductoBean;
+		int nuevosRegistros = 50;
 
 		String[] desc = { "Arroz", "Fideos", "Macarrones", "Huevos", "Leche", "Pechuga Pollo", "Pechuga pavo",
 				"Solomillo", "Conejo", "Sardina", "Yogur", "Pizza", "Flan", "Mazorca Maiz", "Pepino", "Manzana",
 				"Platano", "Tupu" };
-		Integer[] tipoProducto = { 1, 2, 3, 4, 5 };
+		Integer[] tipoProducto = { 1, 2, 3 };
 		String[] codigo = { "8a7ddff", "7as9d", "dasf77sf", "987dff", "cs9df", "1d7fsaf9", "7sdfw8ef", "68fsadf8",
 				"6asd7", "894xa9" };
-
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < nuevosRegistros; i++) {
 			oProductoBean = new ProductoBean();
 			int randDesc = randomDesc.nextInt(20);
-			int randTipoProducto = randomTipoProducto.nextInt(5);
+			int randTipoProducto = randomTipoProducto.nextInt(3);
 			int randCodigo = randomCodigo.nextInt(10);
 			int existencias = ThreadLocalRandom.current().nextInt(0, 3000 + 1);
 			double precio = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
 
-			oProductoBean.setDesc(desc[randDesc]);
-			oProductoBean.setId_tipoProducto(tipoProducto[randTipoProducto]);
 			oProductoBean.setCodigo(codigo[randCodigo]);
+			oProductoBean.setDesc(desc[randDesc]);
 			oProductoBean.setExistencias(existencias);
 			oProductoBean.setPrecio((float) precio);
-			
+			oProductoBean.setFoto(foto);
+			oProductoBean.setId_tipoProducto(tipoProducto[randTipoProducto]);
 			listaRandomProducto.add(oProductoBean);
 
 		}
@@ -169,8 +188,8 @@ public class ProductoService {
 			oConnection = oConnectionPool.newConnection();
 			ProductoDao oProductoDao = new ProductoDao(oConnection, ob);
 			iRes = oProductoDao.update(oProductoBean);
-			//oReplyBean.setStatus(200);
-			//oReplyBean.setJson(Integer.toString(iRes));
+			// oReplyBean.setStatus(200);
+			// oReplyBean.setJson(Integer.toString(iRes));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
 		} finally {
@@ -201,28 +220,30 @@ public class ProductoService {
 		return oReplyBean;
 
 	}
-	
+
 	public ReplyBean loaddata() throws Exception {
-        ReplyBean oReplyBean;
-        ConnectionInterface oConnectionPool = null;
-        Connection oConnection;
-        ArrayList<ProductoBean> productos = new ArrayList<>();
-        RellenarService oRellenarService = new RellenarService();
-        try {
-            Integer number = Integer.parseInt(oRequest.getParameter("number"));
-            oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
-            oConnection = oConnectionPool.newConnection();
-            ProductoDao oProductoDao = new ProductoDao(oConnection, ob);
-            productos = oRellenarService.RellenarProducto(number);
-            for (ProductoBean producto : productos) {
-                oProductoDao.create(producto);
-            }
-            Gson oGson = new Gson();
-            oReplyBean = new ReplyBean(200, oGson.toJson("Productos creados: " + number));
-        } catch (Exception ex) {
-            oReplyBean = new ReplyBean(500,
-                    "ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
-        }
-        return oReplyBean;
-    }
+		ReplyBean oReplyBean;
+		ConnectionInterface oConnectionPool = null;
+		Connection oConnection;
+		ArrayList<ProductoBean> listaProductos = new ArrayList<>();
+		RellenarService oRellenarService = new RellenarService();
+		try {
+			// number es el número de productos que vamos a crear.
+			Integer number = Integer.parseInt(oRequest.getParameter("number"));
+			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+			oConnection = oConnectionPool.newConnection();
+			ProductoDao oProductoDao = new ProductoDao(oConnection, ob);
+			// Este arrayList coge los valores que se han creado en RellenarProducto();
+			listaProductos = oRellenarService.RellenarProducto(number);
+			for (ProductoBean producto : listaProductos) {
+				oProductoDao.create(producto);
+			}
+			Gson oGson = new Gson();
+			oReplyBean = new ReplyBean(200, oGson.toJson("Productos creados: " + number));
+		} catch (Exception ex) {
+			oReplyBean = new ReplyBean(500,
+					"ERROR: " + EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage())));
+		}
+		return oReplyBean;
+	}
 }

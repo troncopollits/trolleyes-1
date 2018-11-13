@@ -17,7 +17,7 @@ import net.daw.bean.ProductoBean;
  * @author a044531896d
  */
 public class ProductoDao {
-    Connection oConnection;
+	Connection oConnection;
 	String ob = null;
 
 	public ProductoDao(Connection oConnection, String ob) {
@@ -38,14 +38,14 @@ public class ProductoDao {
 			if (oResultSet.next()) {
 				oProductoBean = new ProductoBean();
 				oProductoBean.setId(oResultSet.getInt("id"));
-                oProductoBean.setCodigo(oResultSet.getString("codigo"));
-                oProductoBean.setDesc(oResultSet.getString("desc"));
+				oProductoBean.setCodigo(oResultSet.getString("codigo"));
+				oProductoBean.setDesc(oResultSet.getString("desc"));
 				oProductoBean.setExistencias(oResultSet.getInt("existencias"));
-                oProductoBean.setPrecio(oResultSet.getFloat("precio"));
-                oProductoBean.setFoto(oResultSet.getString("foto"));
-                oProductoBean.setId_tipoProducto(oResultSet.getInt("id_tipoProducto"));
+				oProductoBean.setPrecio(oResultSet.getFloat("precio"));
+				oProductoBean.setFoto(oResultSet.getString("foto"));
+				oProductoBean.setId_tipoProducto(oResultSet.getInt("id_tipoProducto"));
 			} else {
-				oProductoBean= null;
+				oProductoBean = null;
 			}
 		} catch (SQLException e) {
 			throw new Exception("Error en Dao get de " + ob, e);
@@ -102,52 +102,55 @@ public class ProductoDao {
 		return res;
 	}
 
-	 public ProductoBean create(ProductoBean oProductoBean) throws Exception {
-	        String strSQL = "INSERT INTO " + ob + " (`id`, `codigo`, `desc`, `existencias`, `precio`, `foto`, `id_tipoProducto`) VALUES (NULL, ?,?,?,?,?,?); ";
-	        ResultSet oResultSet = null;
-	        PreparedStatement oPreparedStatement = null;
-	        try {
-	            oPreparedStatement = oConnection.prepareStatement(strSQL);
-	            oPreparedStatement.setString(1, oProductoBean.getCodigo());
-	            oPreparedStatement.setString(2, oProductoBean.getDesc());
-	            oPreparedStatement.setInt(3, oProductoBean.getExistencias());
-	            oPreparedStatement.setFloat(4, oProductoBean.getPrecio());
-	            oPreparedStatement.setString(5, oProductoBean.getFoto());
-	            oPreparedStatement.setInt(6, oProductoBean.getId_tipoProducto());
-	            oPreparedStatement.executeUpdate();
-	            oResultSet = oPreparedStatement.getGeneratedKeys();
-	            if (oResultSet.next()) {
-	                oProductoBean.setId(oResultSet.getInt(1));
-	            } else {
-	                oProductoBean.setId(0);
-	            }
-	        } catch (SQLException e) {
-	            throw new Exception("Error en Dao create de " + ob, e);
-	        } finally {
-	            if (oResultSet != null) {
-	                oResultSet.close();
-	            }
-	            if (oPreparedStatement != null) {
-	                oPreparedStatement.close();
-	            }
-	        }
-	        return oProductoBean;
-	    }
+	public ProductoBean create(ProductoBean oProductoBean) throws Exception {
+		String strSQL = "INSERT INTO " + ob
+				+ " (`id`, `codigo`, `desc`, `existencias`, `precio`, `foto`, `id_tipoProducto`) VALUES (NULL, ?,?,?,?,?,?); ";
+		ResultSet oResultSet = null;
+		PreparedStatement oPreparedStatement = null;
+		try {
+			oPreparedStatement = oConnection.prepareStatement(strSQL);
+			oPreparedStatement.setString(1, oProductoBean.getCodigo());
+			oPreparedStatement.setString(2, oProductoBean.getDesc());
+			oPreparedStatement.setInt(3, oProductoBean.getExistencias());
+			oPreparedStatement.setFloat(4, oProductoBean.getPrecio());
+			oPreparedStatement.setString(5, oProductoBean.getFoto());
+			oPreparedStatement.setInt(6, oProductoBean.getId_tipoProducto());
+			oPreparedStatement.executeUpdate();
+			oResultSet = oPreparedStatement.getGeneratedKeys();
+			if (oResultSet.next()) {
+				oProductoBean.setId(oResultSet.getInt(1));
+			} else {
+				oProductoBean.setId(0);
+			}
+		} catch (SQLException e) {
+			throw new Exception("Error en Dao create de " + ob, e);
+		} finally {
+			if (oResultSet != null) {
+				oResultSet.close();
+			}
+			if (oPreparedStatement != null) {
+				oPreparedStatement.close();
+			}
+		}
+		return oProductoBean;
+	}
 
 	public int update(ProductoBean oProductoBean) throws Exception {
 		int iResult = 0;
-		String strSQL = "UPDATE " + ob + " SET " + ob + ".codigo = ?,  " + ob + ".desc = ?,  " + ob + ".existencias = ?, " + ob + ".precio = ?, " + ob + ".foto = ?, " + ob + ".id_tipoProducto = ?  WHERE  " + ob + ".id = ?;";
+		String strSQL = "UPDATE " + ob + " SET " + ob + ".codigo = ?,  " + ob + ".desc = ?,  " + ob
+				+ ".existencias = ?, " + ob + ".precio = ?, " + ob + ".foto = ?, " + ob
+				+ ".id_tipoProducto = ?  WHERE  " + ob + ".id = ?;";
 
 		PreparedStatement oPreparedStatement = null;
 		try {
 			oPreparedStatement = oConnection.prepareStatement(strSQL);
 			oPreparedStatement.setString(1, oProductoBean.getCodigo());
 			oPreparedStatement.setString(2, oProductoBean.getDesc());
-                        oPreparedStatement.setInt(3, oProductoBean.getExistencias());
-                        oPreparedStatement.setFloat(4, oProductoBean.getPrecio());
-                        oPreparedStatement.setString(5, oProductoBean.getFoto());
-                        oPreparedStatement.setInt(6, oProductoBean.getId_tipoProducto());
-                        oPreparedStatement.setInt(7, oProductoBean.getId());
+			oPreparedStatement.setInt(3, oProductoBean.getExistencias());
+			oPreparedStatement.setFloat(4, oProductoBean.getPrecio());
+			oPreparedStatement.setString(5, oProductoBean.getFoto());
+			oPreparedStatement.setInt(6, oProductoBean.getId_tipoProducto());
+			oPreparedStatement.setInt(7, oProductoBean.getId());
 			iResult = oPreparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -160,18 +163,10 @@ public class ProductoDao {
 		return iResult;
 	}
 
-	public ArrayList<ProductoBean> getpage(int iRpp, int iPage) throws Exception{
-		ArrayList<ProductoBean> alProductoBean = null;
+	public ArrayList<ProductoBean> getpage(int iRpp, int iPage) throws Exception {
 		String strSQL = "SELECT * FROM " + ob;
-		
-//      if (!order.equalsIgnoreCase("") && !ordervalue.equalsIgnoreCase("")) {
-//
-//          order = "`" + order + "`";
-//          strSQL += " ORDER BY " + order + " " + ordervalue;
-//
-//      }
-		
-		if(iRpp > 0 && iRpp <100000 && iPage > 0 && iPage < 100000000) {
+		ArrayList<ProductoBean> alProductoBean = null;
+		if (iRpp > 0 && iRpp < 100000 && iPage > 0 && iPage < 100000000) {
 			strSQL = "LIMIT " + (iPage - 1) * iRpp + ", " + iRpp;
 			ResultSet oResultSet = null;
 			PreparedStatement oPreparedStatement = null;
@@ -179,26 +174,26 @@ public class ProductoDao {
 				oPreparedStatement = oConnection.prepareStatement(strSQL);
 				oResultSet = oPreparedStatement.executeQuery();
 				alProductoBean = new ArrayList<ProductoBean>();
-				while(oResultSet.next()) {
+				while (oResultSet.next()) {
 					ProductoBean oProductoBean = new ProductoBean();
 					oProductoBean.setId(oResultSet.getInt("id"));
 					oProductoBean.setCodigo(oResultSet.getString("codigo"));
 					oProductoBean.setDesc(oResultSet.getString("desc"));
 					oProductoBean.setExistencias(oResultSet.getInt("existencias"));
 					oProductoBean.setPrecio(oResultSet.getFloat("precio"));
-                    oProductoBean.setFoto(oResultSet.getString("foto"));
-                    oProductoBean.setId_tipoProducto(oResultSet.getInt("id_tipoProducto"));
-                    alProductoBean.add(oProductoBean);
+					oProductoBean.setFoto(oResultSet.getString("foto"));
+					oProductoBean.setId_tipoProducto(oResultSet.getInt("id_tipoProducto"));
+					alProductoBean.add(oProductoBean);
 				}
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				throw new Exception("Error en Dao update de " + ob, e);
-			}finally {
+			} finally {
 				if (oResultSet != null) {
-                    oResultSet.close();
-                }
-                if (oPreparedStatement != null) {
-                    oPreparedStatement.close();
-                }
+					oResultSet.close();
+				}
+				if (oPreparedStatement != null) {
+					oPreparedStatement.close();
+				}
 			}
 		}
 		return alProductoBean;

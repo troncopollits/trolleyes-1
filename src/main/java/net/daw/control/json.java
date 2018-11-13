@@ -62,13 +62,13 @@ public class json extends HttpServlet {
 		JsonHelper json = new JsonHelper();
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");//Esto nos da acceso a las librerias de mysql, JDBC es un framework que nos permite trabajar con mysql
 		} catch (Exception ex) {
 			strJson = "{\"status\":500,\"msg\":\"jdbc driver not found\"}";
 		}
 		try {
-			ReplyBean oReplyBean = ServiceFactory.executeService(request);
-			strJson = json.strJson(oReplyBean.getStatus(), oReplyBean.getJson());
+			ReplyBean oReplyBean = ServiceFactory.executeService(request);//Buscamos en ServiceFactory, la 'ob' y 'op' obtenidas de la request
+			strJson = json.strJson(oReplyBean.getStatus(), oReplyBean.getJson());//Mensaje obtenido con el resultado de la operacion, 200 si es satisfactorio y 500 si no.
 		} catch (Exception e) {
 			response.setStatus(500);
 			strJson = json.strJson(500, "Server Error");

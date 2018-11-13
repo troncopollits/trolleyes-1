@@ -2,6 +2,7 @@ package net.daw.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -89,25 +90,45 @@ public class TipousuarioService {
 	}
 
 	public ReplyBean create() throws Exception {
-		ReplyBean oReplyBean;
-		ConnectionInterface oConnectionPool = null;
-		Connection oConnection;
+		ReplyBean oReplyBean;//Es un puto mensaje para averiguar si la operacion ha salido bien o mal en la base de datos.
+		ConnectionInterface oConnectionPool = null;//Simple conexion con la bbdd.
+		Connection oConnection;//Simple conexion con la bbdd.
+		ArrayList<TipousuarioBean> listaTipousuarioBean = new ArrayList<TipousuarioBean>();
 		try {
-			String strJsonFromClient = oRequest.getParameter("json");
+			listaTipousuarioBean = crearDatos();
+			//String strJsonFromClient = oRequest.getParameter("json");//Esta es la puta operacion('op'), la recogemos.
 			Gson oGson = new Gson();
 			TipousuarioBean oTipousuarioBean = new TipousuarioBean();
-			oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);
+			//oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);//NO LO ENTIENDO BIEN
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);
-			oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
+			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);//la conexion siempre viaja a traves de la petición para no saturar el programa, entonces siempre viaja entre clases
+			
+			for(TipousuarioBean tipousuarios : listaTipousuarioBean) {
+				oTipousuarioBean = oTipousuarioDao.create(tipousuarios);
+			}
+			//oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);//El objeto 'ob' es el nombre de la tabla donde se ejecutará la consulta, que será en DAO.
+			//oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
+			oReplyBean = new ReplyBean(200, oGson.toJson("Tipousuarios creados correctamente"));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
 		} finally {
 			oConnectionPool.disposeConnection();
 		}
 		return oReplyBean;
+	}
+
+	private ArrayList<TipousuarioBean> crearDatos() {
+		ArrayList<TipousuarioBean>listaRamdomTipoUsuario = new ArrayList<TipousuarioBean>();
+		String[] desc = {"Cliente"};
+		int numDeRegistrosCreados = 150;
+		TipousuarioBean oTipousuarioBean;
+		for(int i = 0; i < numDeRegistrosCreados; i++) {
+			oTipousuarioBean = new TipousuarioBean();
+			oTipousuarioBean.setDesc(desc[0]);
+			listaRamdomTipoUsuario.add(oTipousuarioBean);
+		}
+		return listaRamdomTipoUsuario;
 	}
 
 	public ReplyBean update() throws Exception {

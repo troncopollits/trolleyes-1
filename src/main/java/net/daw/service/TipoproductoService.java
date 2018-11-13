@@ -14,6 +14,7 @@ import net.daw.bean.TipoproductoBean;
 import net.daw.connection.publicinterface.ConnectionInterface;
 import net.daw.constant.ConnectionConstants;
 import net.daw.dao.TipoproductoDao;
+import net.daw.dao.TipousuarioDao;
 import net.daw.factory.ConnectionFactory;
 
 /**
@@ -97,22 +98,43 @@ public class TipoproductoService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
+		ArrayList<TipoproductoBean>listaTipoproductoBean = new ArrayList<TipoproductoBean>();
 		try {
-			String strJsonFromClient = oRequest.getParameter("json");
+			listaTipoproductoBean = crearDatos();
+			//String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
 			TipoproductoBean oTipoproductoBean = new TipoproductoBean();
-			oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
+			//oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
-			oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
-			oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
+			
+			for(TipoproductoBean tipoproductos : listaTipoproductoBean) {
+				oTipoproductoBean = oTipoproductoDao.create(tipoproductos);
+			}
+			//oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
+			//oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
+			oReplyBean = new ReplyBean(200, oGson.toJson("Tipoproductos creados correctamente"));
+
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
 		} finally {
 			oConnectionPool.disposeConnection();
 		}
 		return oReplyBean;
+	}
+
+	private ArrayList<TipoproductoBean> crearDatos() {
+		ArrayList<TipoproductoBean>listaRandomTipoUsuario = new ArrayList<TipoproductoBean>();
+		String[]desc = {"Machete de plástico"};
+		int numDeRegistrosCreados = 150;
+		TipoproductoBean oTipoproductoBean;
+		for(int i = 0 ; i < numDeRegistrosCreados; i++) {
+			oTipoproductoBean = new TipoproductoBean();
+			oTipoproductoBean.setDesc(desc[0]);
+			listaRandomTipoUsuario.add(oTipoproductoBean);
+		}
+		return listaRandomTipoUsuario;
 	}
 
 	public ReplyBean update() throws Exception {

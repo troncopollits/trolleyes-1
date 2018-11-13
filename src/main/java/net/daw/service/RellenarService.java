@@ -13,7 +13,7 @@ public class RellenarService {
 		int[] id_tipoProducto = { 1, 2, 3, 4, 5, 6 };
 		int[] existencias = { 1, 2, 3, 4, 5, 6 };
 
-		// Para tener mayor control de el maximo de objetos que tengo en los arrays
+		// Para tener mayor control del maximo de objetos que tengo en los arrays
 		int maxDatos = 6;
 
 		ArrayList<ProductoBean> resultado = new ArrayList<>();
