@@ -66,8 +66,14 @@ public class ServiceFactory {
 			case "getpage":
 				oReplyBean = oUsuarioService.getpage();
 				break;
-			case "fill":
-				oReplyBean = oUsuarioService.fill();
+			case "login":
+                oReplyBean = oUsuarioService.login();
+                break;
+            case "logout":
+                oReplyBean = oUsuarioService.logout();
+                break;
+            case "check":
+                oReplyBean = oUsuarioService.check();             
 				break;				
 			default:
 				oReplyBean = new ReplyBean(500, "Operation doesn't exist");
