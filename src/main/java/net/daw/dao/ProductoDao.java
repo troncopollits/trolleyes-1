@@ -25,6 +25,7 @@ public class ProductoDao {
 		this.oConnection = oConnection;
 		this.ob = ob;
 	}
+	
 
 	public ProductoBean get(int id) throws Exception {
 		String strSQL = "SELECT * FROM " + ob + " WHERE id=?";
