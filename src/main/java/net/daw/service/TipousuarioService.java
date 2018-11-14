@@ -35,7 +35,7 @@ public class TipousuarioService {
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			TipousuarioBean oTipousuarioBean = oTipousuarioDao.get(id);
+			TipousuarioBean oTipousuarioBean = oTipousuarioDao.get(id, 1);
 			Gson oGson = new Gson();
 			oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
 		} catch (Exception ex) {
@@ -95,20 +95,20 @@ public class TipousuarioService {
 		Connection oConnection;//Simple conexion con la bbdd.
 		ArrayList<TipousuarioBean> listaTipousuarioBean = new ArrayList<TipousuarioBean>();
 		try {
-			listaTipousuarioBean = crearDatos();
-			//String strJsonFromClient = oRequest.getParameter("json");//Esta es la puta operacion('op'), la recogemos.
+			//listaTipousuarioBean = crearDatos();
+			String strJsonFromClient = oRequest.getParameter("json");//Esta es la puta operacion('op'), la recogemos.
 			Gson oGson = new Gson();
 			TipousuarioBean oTipousuarioBean = new TipousuarioBean();
-			//oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);//NO LO ENTIENDO BIEN
+			oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);//NO LO ENTIENDO BIEN
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);//la conexion siempre viaja a traves de la petición para no saturar el programa, entonces siempre viaja entre clases
 			
-			for(TipousuarioBean tipousuarios : listaTipousuarioBean) {
+			/*for(TipousuarioBean tipousuarios : listaTipousuarioBean) {
 				oTipousuarioBean = oTipousuarioDao.create(tipousuarios);
-			}
-			//oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);//El objeto 'ob' es el nombre de la tabla donde se ejecutará la consulta, que será en DAO.
-			//oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
+			}*/
+			oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);//El objeto 'ob' es el nombre de la tabla donde se ejecutará la consulta, que será en DAO.
+			oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
 			oReplyBean = new ReplyBean(200, oGson.toJson("Tipousuarios creados correctamente"));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
@@ -120,12 +120,14 @@ public class TipousuarioService {
 
 	private ArrayList<TipousuarioBean> crearDatos() {
 		ArrayList<TipousuarioBean>listaRamdomTipoUsuario = new ArrayList<TipousuarioBean>();
-		String[] desc = {"Cliente"};
-		int numDeRegistrosCreados = 150;
+		String[] desc = {"Cliente","Administrador","Puto amo","Becario"};
+		Random RandomDesc = new Random();
+		int numDeRegistrosCreados = 105;
 		TipousuarioBean oTipousuarioBean;
 		for(int i = 0; i < numDeRegistrosCreados; i++) {
 			oTipousuarioBean = new TipousuarioBean();
-			oTipousuarioBean.setDesc(desc[0]);
+			int randDesc = RandomDesc.nextInt(4);
+			oTipousuarioBean.setDesc(desc[randDesc]);
 			listaRamdomTipoUsuario.add(oTipousuarioBean);
 		}
 		return listaRamdomTipoUsuario;
@@ -145,7 +147,7 @@ public class TipousuarioService {
 			oConnection = oConnectionPool.newConnection();
 			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
 			iRes = oTipousuarioDao.update(oTipousuarioBean);
-                        oReplyBean = new ReplyBean(200,Integer.toString(iRes));
+			oReplyBean = new ReplyBean(200, Integer.toString(iRes));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
 		} finally {
@@ -164,7 +166,7 @@ public class TipousuarioService {
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			ArrayList<TipousuarioBean> alTipousuarioBean = oTipousuarioDao.getpage(iRpp, iPage);
+			ArrayList<TipousuarioBean> alTipousuarioBean = oTipousuarioDao.getpage(iRpp, iPage, 1);
 			Gson oGson = new Gson();
 			oReplyBean = new ReplyBean(200, oGson.toJson(alTipousuarioBean));
 		} catch (Exception ex) {

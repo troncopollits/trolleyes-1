@@ -8,6 +8,8 @@ package net.daw.service;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.servlet.http.HttpServletRequest;
 import net.daw.bean.ReplyBean;
 import net.daw.bean.TipoproductoBean;
@@ -100,20 +102,20 @@ public class TipoproductoService {
 		Connection oConnection;
 		ArrayList<TipoproductoBean>listaTipoproductoBean = new ArrayList<TipoproductoBean>();
 		try {
-			listaTipoproductoBean = crearDatos();
-			//String strJsonFromClient = oRequest.getParameter("json");
+			//listaTipoproductoBean = crearDatos();
+			String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
 			TipoproductoBean oTipoproductoBean = new TipoproductoBean();
-			//oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
+			oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
 			
-			for(TipoproductoBean tipoproductos : listaTipoproductoBean) {
+			/*for(TipoproductoBean tipoproductos : listaTipoproductoBean) {
 				oTipoproductoBean = oTipoproductoDao.create(tipoproductos);
-			}
-			//oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
-			//oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
+			}*/
+			oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
+			oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
 			oReplyBean = new ReplyBean(200, oGson.toJson("Tipoproductos creados correctamente"));
 
 		} catch (Exception ex) {
@@ -123,15 +125,17 @@ public class TipoproductoService {
 		}
 		return oReplyBean;
 	}
-
+	
 	private ArrayList<TipoproductoBean> crearDatos() {
 		ArrayList<TipoproductoBean>listaRandomTipoUsuario = new ArrayList<TipoproductoBean>();
-		String[]desc = {"Machete de plástico"};
-		int numDeRegistrosCreados = 150;
+		String[]desc = {"Cuchillos","Navajas","Machetes"};
+		Random RandomDesc = new Random();
+		int numDeRegistrosCreados = 100;
 		TipoproductoBean oTipoproductoBean;
 		for(int i = 0 ; i < numDeRegistrosCreados; i++) {
 			oTipoproductoBean = new TipoproductoBean();
-			oTipoproductoBean.setDesc(desc[0]);
+			int randDesc = RandomDesc.nextInt(3);
+			oTipoproductoBean.setDesc(desc[randDesc]);
 			listaRandomTipoUsuario.add(oTipoproductoBean);
 		}
 		return listaRandomTipoUsuario;

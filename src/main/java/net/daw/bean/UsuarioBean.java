@@ -5,6 +5,12 @@
  */
 package net.daw.bean;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+
+import net.daw.dao.TipousuarioDao;
+import net.daw.helper.EncodingHelper;
+
 /**
  *
  * @author jesus
@@ -77,5 +83,65 @@ public class UsuarioBean {
     public void setId_tipoUsuario(int id_tipoUsuario) {
         this.id_tipoUsuario = id_tipoUsuario;
     }
+    
+    public UsuarioBean fill(ResultSet oResultSet, Connection oConnection, Integer expand) throws Exception {
+		this.setId(oResultSet.getInt("id"));
+		this.setDni(oResultSet.getString("dni"));
+		this.setNombre(oResultSet.getString("nombre"));
+		this.setApe1(oResultSet.getString("ape1"));
+		this.setApe2(oResultSet.getString("ape2"));
+		this.setLogin(oResultSet.getString("login"));
+		this.setPass(oResultSet.getString("pass"));
+		if (expand > 0) {
+			TipousuarioDao otipousuarioDao = new TipousuarioDao(oConnection, "tipousuario");
+			this.setObj_tipoUsuario(otipousuarioDao.get(oResultSet.getInt("id_tipoUsuario"), expand - 1));
+		} else {
+			this.setId_tipoUsuario(oResultSet.getInt("id_tipoUsuario"));
+		}
+		return this;
+	}
 
+	
+	private void setObj_tipoUsuario(TipousuarioBean tipousuarioBean) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getColumns() {
+		String strColumns="";
+		strColumns += "id,";
+		strColumns += "dni,";
+		strColumns += "nombre,";
+		strColumns += "ape1,";
+		strColumns += "ape2,";
+		strColumns += "login,";
+		strColumns += "pass,";		
+		strColumns += "id_tipoUsuario";		
+		return strColumns;				
+	}
+	
+	public String getValues() {
+		String strColumns="";
+		strColumns += "null,";
+		strColumns += EncodingHelper.quotate(dni) + ",";
+		strColumns += EncodingHelper.quotate(nombre) + ",";
+		strColumns += EncodingHelper.quotate(ape1) + ",";
+		strColumns += EncodingHelper.quotate(ape2) + ",";
+		strColumns += EncodingHelper.quotate(login) + ",";		
+		strColumns += EncodingHelper.quotate("DA8AB09AB4889C6208116A675CAD0B13E335943BD7FC418782D054B32FDFBA04") + ",";			
+		strColumns += id_tipoUsuario;		
+		return strColumns;				
+	}
+	
+	public String getPairs() {
+		String strPairs="";
+		strPairs += "id=" + id + ",";
+		strPairs += "nombre=" + EncodingHelper.quotate(nombre) + ",";
+		strPairs += "ape1=" + EncodingHelper.quotate(ape1) + ",";
+		strPairs += "ape2=" + EncodingHelper.quotate(ape2) + ",";
+		strPairs += "login=" + EncodingHelper.quotate(login) + ",";
+		strPairs += "id_tipoUsuario=" + id_tipoUsuario;
+		return strPairs;
+		
+	}
 }

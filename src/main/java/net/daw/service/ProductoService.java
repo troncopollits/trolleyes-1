@@ -120,24 +120,7 @@ public class ProductoService {
 		}
 		return oReplyBean;
 	}
-
-	/*
-	 * public ReplyBean cargarProductos()throws Exception{ ReplyBean oReplyBean;
-	 * ConnectionInterface oConnectionPool = null; Connection oConnection;
-	 * RellenarService rellenar = new RellenarService(); try { Integer numero =
-	 * Integer.parseInt(oRequest.getParameter("numero")); oConnectionPool =
-	 * ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
-	 * oConnection = oConnectionPool.newConnection(); ProductoDao oProductoDao = new
-	 * ProductoDao(oConnection, ob); ArrayList<ProductoBean> alProductoBean =
-	 * rellenar.fillProducto(numero);
-	 * 
-	 * for(ProductoBean productos : alProductoBean){ oProductoDao.create(productos);
-	 * } Gson oGson = new Gson(); oReplyBean = new ReplyBean(200,
-	 * oGson.toJson(alProductoBean)); } catch (Exception ex) { oReplyBean = new
-	 * ReplyBean(500, "ERROR: " +
-	 * EncodingHelper.escapeQuotes(EncodingHelper.escapeLine(ex.getMessage()))); }
-	 * finally { oConnectionPool.disposeConnection(); } }
-	 */
+	
 	// Metodo para crear varios productos de manera aleatoria
 	public ArrayList<ProductoBean> crearDatos() {
 		ArrayList<ProductoBean> listaRandomProducto = new ArrayList<ProductoBean>();
