@@ -131,16 +131,14 @@ public class ProductoService {
 		ProductoBean oProductoBean;
 		int nuevosRegistros = 50;
 
-		String[] desc = { "Arroz", "Fideos", "Macarrones", "Huevos", "Leche", "Pechuga Pollo", "Pechuga pavo",
-				"Solomillo", "Conejo", "Sardina", "Yogur", "Pizza", "Flan", "Mazorca Maiz", "Pepino", "Manzana",
-				"Platano", "Tupu" };
-		Integer[] tipoProducto = { 1, 2, 3 };
+		String[] desc = { "Cuchillo", "Navaja", "Tijera", "Hacha", "Machete", "Katana", "Lanza", "Espada", "Puñal", "Estilete"};
+		Integer[] tipoProducto = { 160, 155, 170, 169, 157 };
 		String[] codigo = { "8a7ddff", "7as9d", "dasf77sf", "987dff", "cs9df", "1d7fsaf9", "7sdfw8ef", "68fsadf8",
 				"6asd7", "894xa9" };
 		for (int i = 0; i < nuevosRegistros; i++) {
 			oProductoBean = new ProductoBean();
-			int randDesc = randomDesc.nextInt(20);
-			int randTipoProducto = randomTipoProducto.nextInt(3);
+			int randDesc = randomDesc.nextInt(10);
+			int randTipoProducto = randomTipoProducto.nextInt(5);
 			int randCodigo = randomCodigo.nextInt(10);
 			int existencias = ThreadLocalRandom.current().nextInt(0, 3000 + 1);
 			double precio = ThreadLocalRandom.current().nextInt(1, 1000 + 1);

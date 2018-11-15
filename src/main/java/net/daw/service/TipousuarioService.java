@@ -124,7 +124,7 @@ public class TipousuarioService {
 		Random RandomDesc = new Random();
 		int numDeRegistrosCreados = 105;
 		TipousuarioBean oTipousuarioBean;
-		for(int i = 0; i < numDeRegistrosCreados; i++) {
+		for(int i = 0; i <= numDeRegistrosCreados; i++) {
 			oTipousuarioBean = new TipousuarioBean();
 			int randDesc = RandomDesc.nextInt(3);
 			oTipousuarioBean.setDesc(desc[randDesc]);
