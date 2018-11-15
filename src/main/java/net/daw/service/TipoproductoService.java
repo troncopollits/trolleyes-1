@@ -102,20 +102,20 @@ public class TipoproductoService {
 		Connection oConnection;
 		ArrayList<TipoproductoBean>listaTipoproductoBean = new ArrayList<TipoproductoBean>();
 		try {
-			//listaTipoproductoBean = crearDatos();
-			String strJsonFromClient = oRequest.getParameter("json");
+			listaTipoproductoBean = crearDatos();
+			//String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
 			TipoproductoBean oTipoproductoBean = new TipoproductoBean();
-			oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
+			//oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
 			
-			/*for(TipoproductoBean tipoproductos : listaTipoproductoBean) {
+			for(TipoproductoBean tipoproductos : listaTipoproductoBean) {
 				oTipoproductoBean = oTipoproductoDao.create(tipoproductos);
-			}*/
-			oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
-			oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
+			}
+			//oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
+			//oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
 			oReplyBean = new ReplyBean(200, oGson.toJson("Tipoproductos creados correctamente"));
 
 		} catch (Exception ex) {

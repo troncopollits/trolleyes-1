@@ -95,20 +95,20 @@ public class TipousuarioService {
 		Connection oConnection;//Simple conexion con la bbdd.
 		ArrayList<TipousuarioBean> listaTipousuarioBean = new ArrayList<TipousuarioBean>();
 		try {
-			//listaTipousuarioBean = crearDatos();
-			String strJsonFromClient = oRequest.getParameter("json");//Esta es la puta operacion('op'), la recogemos.
+			listaTipousuarioBean = crearDatos();
+			//String strJsonFromClient = oRequest.getParameter("json");//Esta es la puta operacion('op'), la recogemos.
 			Gson oGson = new Gson();
 			TipousuarioBean oTipousuarioBean = new TipousuarioBean();
-			oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);//NO LO ENTIENDO BIEN
+			//oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);//NO LO ENTIENDO BIEN
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);//la conexion siempre viaja a traves de la petición para no saturar el programa, entonces siempre viaja entre clases
+			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);//la conexion siempre viaja a traves de la peticiï¿½n para no saturar el programa, entonces siempre viaja entre clases
 			
-			/*for(TipousuarioBean tipousuarios : listaTipousuarioBean) {
+			for(TipousuarioBean tipousuarios : listaTipousuarioBean) {
 				oTipousuarioBean = oTipousuarioDao.create(tipousuarios);
-			}*/
-			oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);//El objeto 'ob' es el nombre de la tabla donde se ejecutará la consulta, que será en DAO.
-			oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
+			}
+			//oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);//El objeto 'ob' es el nombre de la tabla donde se ejecutarï¿½ la consulta, que serï¿½ en DAO.
+			//oReplyBean = new ReplyBean(200, oGson.toJson(oTipousuarioBean));
 			oReplyBean = new ReplyBean(200, oGson.toJson("Tipousuarios creados correctamente"));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
@@ -120,13 +120,13 @@ public class TipousuarioService {
 
 	private ArrayList<TipousuarioBean> crearDatos() {
 		ArrayList<TipousuarioBean>listaRamdomTipoUsuario = new ArrayList<TipousuarioBean>();
-		String[] desc = {"Cliente","Administrador","Puto amo","Becario"};
+		String[] desc = {"Cliente","Administrador","Becario"};
 		Random RandomDesc = new Random();
 		int numDeRegistrosCreados = 105;
 		TipousuarioBean oTipousuarioBean;
 		for(int i = 0; i < numDeRegistrosCreados; i++) {
 			oTipousuarioBean = new TipousuarioBean();
-			int randDesc = RandomDesc.nextInt(4);
+			int randDesc = RandomDesc.nextInt(3);
 			oTipousuarioBean.setDesc(desc[randDesc]);
 			listaRamdomTipoUsuario.add(oTipousuarioBean);
 		}
