@@ -122,7 +122,7 @@ public class TipousuarioService {
 		ArrayList<TipousuarioBean>listaRamdomTipoUsuario = new ArrayList<TipousuarioBean>();
 		String[] desc = {"Cliente","Administrador","Becario"};
 		Random RandomDesc = new Random();
-		int numDeRegistrosCreados = 105;
+		int numDeRegistrosCreados = 50;
 		TipousuarioBean oTipousuarioBean;
 		for(int i = 0; i <= numDeRegistrosCreados; i++) {
 			oTipousuarioBean = new TipousuarioBean();

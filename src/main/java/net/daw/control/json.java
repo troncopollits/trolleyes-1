@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import net.daw.bean.ReplyBean;
 import net.daw.constant.ConfigurationConstants;
 import net.daw.constant.ConfigurationConstants.EnvironmentConstans;
@@ -18,7 +20,7 @@ import net.daw.helper.JsonHelper;
  * Servlet implementation class json
  */
 public class json extends HttpServlet {
-	/* Comentario */
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -49,7 +51,6 @@ public class json extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
 		response.setContentType("application/json;charset=UTF-8");
 
 		response.setHeader("Access-Control-Allow-Origin", request.getHeader("origin"));
@@ -62,13 +63,15 @@ public class json extends HttpServlet {
 		JsonHelper json = new JsonHelper();
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");//Esto nos da acceso a las librerias de mysql, JDBC es un framework que nos permite trabajar con mysql
 		} catch (Exception ex) {
 			strJson = "{\"status\":500,\"msg\":\"jdbc driver not found\"}";
 		}
 		try {
-			ReplyBean oReplyBean = ServiceFactory.executeService(request);
-			strJson = json.strJson(oReplyBean.getStatus(), oReplyBean.getJson());
+			ReplyBean oReplyBean = ServiceFactory.executeService(request);//Buscamos en ServiceFactory, la 'ob' y 'op' obtenidas de la request
+			strJson = json.strJson(oReplyBean.getStatus(), oReplyBean.getJson());//Mensaje obtenido con el resultado de la operacion, 200 si es satisfactorio y 500 si no.
+			Gson oGson = new Gson();
+            oGson.toJson(strJson);
 		} catch (Exception e) {
 			response.setStatus(500);
 			strJson = json.strJson(500, "Server Error");

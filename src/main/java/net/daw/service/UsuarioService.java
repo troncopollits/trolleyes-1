@@ -22,10 +22,6 @@ import net.daw.constant.ConnectionConstants;
 import net.daw.dao.UsuarioDao;
 import net.daw.factory.ConnectionFactory;
 
-/**
- *
- * @author jesus
- */
 public class UsuarioService {
 	HttpServletRequest oRequest;
 	String ob = null;
@@ -36,7 +32,6 @@ public class UsuarioService {
 		ob = oRequest.getParameter("ob");
 	}
 
-	// Check para confirmar si estamos logueados
 	protected Boolean checkPermission(String strMethodName) {
 		UsuarioBean oUsuarioBean = (UsuarioBean) oRequest.getSession().getAttribute("user");
 		if (oUsuarioBean != null) {
@@ -50,7 +45,7 @@ public class UsuarioService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		if (this.checkPermission("get")) {
+		//if (this.checkPermission("get")) {
 			try {
 				Integer id = Integer.parseInt(oRequest.getParameter("id"));
 				oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
@@ -64,10 +59,10 @@ public class UsuarioService {
 			} finally {
 				oConnectionPool.disposeConnection();
 			}
-		} else {
-			oReplyBean = new ReplyBean(401, "Unauthorized");
+		//} else {
+			//oReplyBean = new ReplyBean(401, "Unauthorized");
 
-		}
+		//}
 		return oReplyBean;
 
 	}
@@ -157,17 +152,17 @@ public class UsuarioService {
 		ArrayList<UsuarioBean> listaRandomUsuario = new ArrayList<UsuarioBean>();
 		String[] dni = { "20934843S", "49085524M", "73846284E", "48468742Q", "23148745H", "19872987V", "12878918X",
 				"98464987S", "98432112L", "89489732F", "46841354B" };// 11
-		String[] nombre = { "Arturo", "Antonio", "Jose", "Benjamin", "Parrales", "Pere", "Xavi", "David", "Berengario",
-				"Andrés", "Paco" };// 11
+		String[] nombre = { "Arturo", "Antonio", "Alicia", "Benjamin", "Parrales", "Maria", "Xavi", "David", "Berengario",
+				"Andres", "Paca" };// 11
 		String[] ape1 = { "Sendra", "Garcia", "De la Reina", "Otras Hierbas", "Murillo", "Franklin", "De la Vega",
 				"Lorca", "Pajares", "Abascal", "Gandhi" };// 11
 		String[] ape2 = { "Bisquert", "Garcia", "Marquez", "Llamas", "Monzonis", "Perez", "Reverte", "Santacreu",
 				"Ortega", "Ahuir", "Naranjo" };// 11
-		String[] login = { "XXX", "SeñorX", "9879", "75456a4sd", "8192", "9819", "3987", "418a", "3687", "3981",
-				"6998" };// 11
+		String[] login = { "XXX", "SenyorX", "Perro", "Gato", "Pepino", "Naranja", "Platano", "Reddit", "Bote", "Ralf",
+				"Bart" };// 11
 		String[] pass = { "abc", "def", "ghi", "jkl", "mnn", "opq", "rst", "uvw", "xyz", "123", "456" };// 11
 		
-		int[] id_tipoUsuario = { 512, 520, 533, 525, 540};
+		int[] id_tipoUsuario = { 5,8,7,6,20};
 		int numUsuarioCreados = 100;
 
 		Random randDni = new Random();

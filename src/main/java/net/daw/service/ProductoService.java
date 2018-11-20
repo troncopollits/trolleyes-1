@@ -131,7 +131,7 @@ public class ProductoService {
 		ProductoBean oProductoBean;
 		int nuevosRegistros = 50;
 
-		String[] desc = { "Cuchillo", "Navaja", "Tijera", "Hacha", "Machete", "Katana", "Lanza", "Espada", "Puñal", "Estilete"};
+		String[] desc = { "Cuchillo", "Navaja", "Tijera", "Hacha", "Machete", "Katana", "Lanza", "Espada", "Punzon", "Estilete"};
 		Integer[] tipoProducto = { 160, 155, 170, 169, 157 };
 		String[] codigo = { "8a7ddff", "7as9d", "dasf77sf", "987dff", "cs9df", "1d7fsaf9", "7sdfw8ef", "68fsadf8",
 				"6asd7", "894xa9" };
