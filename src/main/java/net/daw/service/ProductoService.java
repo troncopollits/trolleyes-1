@@ -30,6 +30,7 @@ public class ProductoService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
+		
 		try {
 			Integer id = Integer.parseInt(oRequest.getParameter("id"));
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
