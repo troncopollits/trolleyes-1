@@ -155,8 +155,7 @@ public class TipoproductoService {
 			oConnection = oConnectionPool.newConnection();
 			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
 			iRes = oTipoproductoDao.update(oTipoproductoBean);
-			oReplyBean.setStatus(200);
-			oReplyBean.setJson(Integer.toString(iRes));
+			oReplyBean = new ReplyBean(200, Integer.toString(iRes));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
 		} finally {

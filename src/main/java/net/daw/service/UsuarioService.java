@@ -50,7 +50,7 @@ public class UsuarioService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		if (this.checkPermission("get")) {
+		//if (this.checkPermission("get")) {
 			try {
 				Integer id = Integer.parseInt(oRequest.getParameter("id"));
 				oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
@@ -64,10 +64,10 @@ public class UsuarioService {
 			} finally {
 				oConnectionPool.disposeConnection();
 			}
-		} else {
-			oReplyBean = new ReplyBean(401, "Unauthorized");
+		//} else {
+			//oReplyBean = new ReplyBean(401, "Unauthorized");
 
-		}
+		//}
 		return oReplyBean;
 
 	}
@@ -157,8 +157,8 @@ public class UsuarioService {
 		ArrayList<UsuarioBean> listaRandomUsuario = new ArrayList<UsuarioBean>();
 		String[] dni = { "20934843S", "49085524M", "73846284E", "48468742Q", "23148745H", "19872987V", "12878918X",
 				"98464987S", "98432112L", "89489732F", "46841354B" };// 11
-		String[] nombre = { "Arturo", "Antonio", "Jose", "Benjamin", "Parrales", "Pere", "Xavi", "David", "Berengario",
-				"Andrés", "Paco" };// 11
+		String[] nombre = { "Arturo", "Antonio", "Jose", "Benjamin", "Parrales", "Pepa", "Xavi", "David", "Berengario",
+				"Andrés", "Maria" };// 11
 		String[] ape1 = { "Sendra", "Garcia", "De la Reina", "Otras Hierbas", "Murillo", "Franklin", "De la Vega",
 				"Lorca", "Pajares", "Abascal", "Gandhi" };// 11
 		String[] ape2 = { "Bisquert", "Garcia", "Marquez", "Llamas", "Monzonis", "Perez", "Reverte", "Santacreu",
