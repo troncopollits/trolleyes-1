@@ -43,6 +43,7 @@ public class FacturaDao {
                                 oFacturaBean.setIva(oResultSet.getDouble("iva"));
                                 oFacturaBean.setId_usuario(oResultSet.getInt("id_usuario"));
 			} else {
+				
 				oFacturaBean = null;
 			}
 		} catch (SQLException e) {

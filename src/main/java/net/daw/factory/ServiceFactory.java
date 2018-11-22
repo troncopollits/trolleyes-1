@@ -169,9 +169,6 @@ public class ServiceFactory {
 			case "crearDatos":
 				oReplyBean = oProductoService.crearDatos();
 				break;
-			case "loaddata":
-				oReplyBean = oProductoService.loaddata();
-				break;
 			default:
 				oReplyBean = new ReplyBean(500, "Operation doesn't exist");
 				break;
