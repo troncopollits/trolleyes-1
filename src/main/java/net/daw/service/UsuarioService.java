@@ -14,7 +14,6 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.daw.bean.ProductoBean;
 import net.daw.bean.ReplyBean;
 import net.daw.bean.UsuarioBean;
 import net.daw.connection.publicinterface.ConnectionInterface;
@@ -50,24 +49,24 @@ public class UsuarioService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		//if (this.checkPermission("get")) {
-			try {
-				Integer id = Integer.parseInt(oRequest.getParameter("id"));
-				oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
-				oConnection = oConnectionPool.newConnection();
-				UsuarioDao oUsuarioDao = new UsuarioDao(oConnection, ob);
-				UsuarioBean oUsuarioBean = oUsuarioDao.get(id);
-				Gson oGson = new Gson();
-				oReplyBean = new ReplyBean(200, oGson.toJson(oUsuarioBean));
-			} catch (Exception ex) {
-				throw new Exception("ERROR: Service level: get method: " + ob + " object", ex);
-			} finally {
-				oConnectionPool.disposeConnection();
-			}
-		//} else {
-			//oReplyBean = new ReplyBean(401, "Unauthorized");
+		// if (this.checkPermission("get")) {
+		try {
+			Integer id = Integer.parseInt(oRequest.getParameter("id"));
+			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+			oConnection = oConnectionPool.newConnection();
+			UsuarioDao oUsuarioDao = new UsuarioDao(oConnection, ob);
+			UsuarioBean oUsuarioBean = oUsuarioDao.get(id);
+			Gson oGson = new Gson();
+			oReplyBean = new ReplyBean(200, oGson.toJson(oUsuarioBean));
+		} catch (Exception ex) {
+			throw new Exception("ERROR: Service level: get method: " + ob + " object", ex);
+		} finally {
+			oConnectionPool.disposeConnection();
+		}
+		// } else {
+		// oReplyBean = new ReplyBean(401, "Unauthorized");
 
-		//}
+		// }
 		return oReplyBean;
 
 	}
@@ -124,24 +123,17 @@ public class UsuarioService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		ArrayList<UsuarioBean> listaProductoBean = new ArrayList<UsuarioBean>();
 		// if (this.checkPermission("get")) {
 		try {
-			listaProductoBean = crearDatos();
-			// String strJsonFromClient = oRequest.getParameter("json");
+			String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
 			UsuarioBean oUsuarioBean = new UsuarioBean();
-			// oUsuarioBean = oGson.fromJson(strJsonFromClient, UsuarioBean.class);
+			oUsuarioBean = oGson.fromJson(strJsonFromClient, UsuarioBean.class);
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			UsuarioDao oUsuarioDao = new UsuarioDao(oConnection, ob);
-			for (UsuarioBean usuarios : listaProductoBean) {
-				oUsuarioBean = oUsuarioDao.create(usuarios);
-			}
-
-			// oUsuarioBean = oUsuarioDao.create(oUsuarioBean);
-			// oReplyBean = new ReplyBean(200, oGson.toJson(oUsuarioBean));
-			oReplyBean = new ReplyBean(200, oGson.toJson("Usuarios creados correctamente"));
+			oUsuarioBean = oUsuarioDao.create(oUsuarioBean);
+			oReplyBean = new ReplyBean(200, oGson.toJson("Usuario creado correctamente"));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
 		} finally {
@@ -153,8 +145,10 @@ public class UsuarioService {
 		return oReplyBean;
 	}
 
-	private ArrayList<UsuarioBean> crearDatos() {
-		ArrayList<UsuarioBean> listaRandomUsuario = new ArrayList<UsuarioBean>();
+	public ReplyBean crearDatos() throws Exception {
+		ReplyBean oReplyBean;
+		ConnectionInterface oConnectionPool = null;
+		Connection oConnection;
 		String[] dni = { "20934843S", "49085524M", "73846284E", "48468742Q", "23148745H", "19872987V", "12878918X",
 				"98464987S", "98432112L", "89489732F", "46841354B" };// 11
 		String[] nombre = { "Arturo", "Antonio", "Jose", "Benjamin", "Parrales", "Pepa", "Xavi", "David", "Berengario",
@@ -163,13 +157,9 @@ public class UsuarioService {
 				"Lorca", "Pajares", "Abascal", "Gandhi" };// 11
 		String[] ape2 = { "Bisquert", "Garcia", "Marquez", "Llamas", "Monzonis", "Perez", "Reverte", "Santacreu",
 				"Ortega", "Ahuir", "Naranjo" };// 11
-		String[] login = { "XXX", "SeñorX", "9879", "75456a4sd", "8192", "9819", "3987", "418a", "3687", "3981",
-				"6998" };// 11
+		String[] login = { "XXX", "SeñorX", "El Pipa", "Judas", "CJ", "Thompson", "Antoniet", "Bacalo", "Palleter",
+				"Botella", "Julay" };// 11
 		String[] pass = { "abc", "def", "ghi", "jkl", "mnn", "opq", "rst", "uvw", "xyz", "123", "456" };// 11
-		
-		int[] id_tipoUsuario = { 512, 520, 533, 525, 540};
-		int numUsuarioCreados = 100;
-
 		Random randDni = new Random();
 		Random randNombre = new Random();
 		Random randApe1 = new Random();
@@ -177,27 +167,43 @@ public class UsuarioService {
 		Random randLogin = new Random();
 		Random randPass = new Random();
 		Random randId_tipoUsuario = new Random();
-		UsuarioBean oUsuarioBean;
-		for (int i = 0; i <= numUsuarioCreados; i++) {
-			oUsuarioBean = new UsuarioBean();
-			int randomDni = randDni.nextInt(11);
-			int randomNombre = randNombre.nextInt(11);
-			int randomApe1 = randApe1.nextInt(11);
-			int randomApe2 = randApe2.nextInt(11);
-			int randomLogin = randLogin.nextInt(11);
-			int randomPass = randPass.nextInt(11);
-			int randomId_tipoUsuario = randId_tipoUsuario.nextInt(5);
-			oUsuarioBean.setDni(dni[randomDni]);
-			oUsuarioBean.setNombre(nombre[randomNombre]);
-			oUsuarioBean.setApe1(ape1[randomApe1]);
-			oUsuarioBean.setApe2(ape2[randomApe2]);
-			oUsuarioBean.setLogin(login[randomLogin]);
-			oUsuarioBean.setPass(pass[randomPass]);
-			oUsuarioBean.setId_tipoUsuario(id_tipoUsuario[randomId_tipoUsuario]);
+		int[] id_tipoUsuario = { 618, 620, 633, 625, 640 };
+		int numUsuarioCreados = 100;
 
-			listaRandomUsuario.add(oUsuarioBean);
+		try {
+			String strJsonFromClient = oRequest.getParameter("json");
+			Gson oGson = new Gson();
+			UsuarioBean oUsuarioBean = new UsuarioBean();
+			oUsuarioBean = oGson.fromJson(strJsonFromClient, UsuarioBean.class);
+			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+			oConnection = oConnectionPool.newConnection();
+			UsuarioDao oUsuarioDao = new UsuarioDao(oConnection, ob);
+
+			for (int i = 0; i <= numUsuarioCreados; i++) {
+				oUsuarioBean = new UsuarioBean();
+				int randomDni = randDni.nextInt(11);
+				int randomNombre = randNombre.nextInt(11);
+				int randomApe1 = randApe1.nextInt(11);
+				int randomApe2 = randApe2.nextInt(11);
+				int randomLogin = randLogin.nextInt(11);
+				int randomPass = randPass.nextInt(11);
+				int randomId_tipoUsuario = randId_tipoUsuario.nextInt(5);
+				oUsuarioBean.setDni(dni[randomDni]);
+				oUsuarioBean.setNombre(nombre[randomNombre]);
+				oUsuarioBean.setApe1(ape1[randomApe1]);
+				oUsuarioBean.setApe2(ape2[randomApe2]);
+				oUsuarioBean.setLogin(login[randomLogin]);
+				oUsuarioBean.setPass(pass[randomPass]);
+				oUsuarioBean.setId_tipoUsuario(id_tipoUsuario[randomId_tipoUsuario]);
+				oUsuarioBean = oUsuarioDao.create(oUsuarioBean);
+			}
+			oReplyBean = new ReplyBean(200, oGson.toJson("Usuarios creados correctamente"));
+		} catch (Exception ex) {
+			throw new Exception("ERROR: No entra", ex);
+		} finally {
+			oConnectionPool.disposeConnection();
 		}
-		return listaRandomUsuario;
+		return oReplyBean;
 	}
 
 	public ReplyBean update() throws Exception {

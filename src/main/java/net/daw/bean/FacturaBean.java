@@ -14,7 +14,7 @@ import java.util.Date;
 public class FacturaBean {
 
     private int id;
-    private Date fecha;
+    private String fecha;
     private double iva;
     private int id_usuario;
 
@@ -26,12 +26,12 @@ public class FacturaBean {
         this.id = id;
     }
 
-    public Date getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFecha(String fecha2) {
+        this.fecha = fecha2;
     }
 
     public double getIva() {

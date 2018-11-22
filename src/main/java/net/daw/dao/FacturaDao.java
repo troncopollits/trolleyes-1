@@ -39,7 +39,7 @@ public class FacturaDao {
 			if (oResultSet.next()) {
 				oFacturaBean = new FacturaBean();
 				oFacturaBean.setId(oResultSet.getInt("id"));
-                                oFacturaBean.setFecha(oResultSet.getDate("fecha"));
+                                oFacturaBean.setFecha(oResultSet.getString("fecha"));
                                 oFacturaBean.setIva(oResultSet.getDouble("iva"));
                                 oFacturaBean.setId_usuario(oResultSet.getInt("id_usuario"));
 			} else {
@@ -106,7 +106,7 @@ public class FacturaDao {
 		PreparedStatement oPreparedStatement = null;
 		try {
 			oPreparedStatement = oConnection.prepareStatement(strSQL);
-			oPreparedStatement.setDate(1, (Date) oFacturaBean.getFecha());
+			oPreparedStatement.setString(1, (String) oFacturaBean.getFecha());
                         oPreparedStatement.setDouble(2, oFacturaBean.getIva());
                         oPreparedStatement.setInt(3, oFacturaBean.getId_usuario());
 			oPreparedStatement.executeUpdate();
@@ -135,7 +135,7 @@ public class FacturaDao {
 		PreparedStatement oPreparedStatement = null;
 		try {
 			oPreparedStatement = oConnection.prepareStatement(strSQL);
-			oPreparedStatement.setDate(1, (Date) oFacturaBean.getFecha());
+			oPreparedStatement.setString(1, (String) oFacturaBean.getFecha());
 			oPreparedStatement.setDouble(2, oFacturaBean.getIva());
                         oPreparedStatement.setDouble(3, oFacturaBean.getIva());
                         oPreparedStatement.setDouble(4, oFacturaBean.getId_usuario());
@@ -165,7 +165,7 @@ public class FacturaDao {
 				while (oResultSet.next()) {
 					FacturaBean oFacturaBean = new FacturaBean();
                                         oFacturaBean.setId(oResultSet.getInt("id"));
-                                        oFacturaBean.setFecha(oResultSet.getDate("fecha"));
+                                        oFacturaBean.setFecha(oResultSet.getString("fecha"));
                                         oFacturaBean.setIva(oResultSet.getDouble("iva"));
                                         oFacturaBean.setId_usuario(oResultSet.getInt("id_usuario"));
 					alFacturaBean.add(oFacturaBean);

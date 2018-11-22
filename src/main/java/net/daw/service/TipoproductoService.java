@@ -16,7 +16,6 @@ import net.daw.bean.TipoproductoBean;
 import net.daw.connection.publicinterface.ConnectionInterface;
 import net.daw.constant.ConnectionConstants;
 import net.daw.dao.TipoproductoDao;
-import net.daw.dao.TipousuarioDao;
 import net.daw.factory.ConnectionFactory;
 
 /**
@@ -24,7 +23,7 @@ import net.daw.factory.ConnectionFactory;
  * @author a044531896d
  */
 public class TipoproductoService {
-    HttpServletRequest oRequest;
+	HttpServletRequest oRequest;
 	String ob = null;
 
 	public TipoproductoService(HttpServletRequest oRequest) {
@@ -87,7 +86,7 @@ public class TipoproductoService {
 			Gson oGson = new Gson();
 			oReplyBean = new ReplyBean(200, oGson.toJson(registros));
 		} catch (Exception ex) {
-			throw new Exception("ERROR: Service level: getcount method: " + ob + " object", ex);			
+			throw new Exception("ERROR: Service level: getcount method: " + ob + " object", ex);
 		} finally {
 			oConnectionPool.disposeConnection();
 		}
@@ -100,9 +99,7 @@ public class TipoproductoService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		ArrayList<TipoproductoBean>listaTipoproductoBean = new ArrayList<TipoproductoBean>();
 		try {
-			//listaTipoproductoBean = crearDatos();
 			String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
 			TipoproductoBean oTipoproductoBean = new TipoproductoBean();
@@ -110,12 +107,7 @@ public class TipoproductoService {
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
-			
-			/*for(TipoproductoBean tipoproductos : listaTipoproductoBean) {
-				oTipoproductoBean = oTipoproductoDao.create(tipoproductos);
-			}*/
 			oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
-			oReplyBean = new ReplyBean(200, oGson.toJson(oTipoproductoBean));
 			oReplyBean = new ReplyBean(200, oGson.toJson("Tipoproductos creados correctamente"));
 
 		} catch (Exception ex) {
@@ -125,20 +117,35 @@ public class TipoproductoService {
 		}
 		return oReplyBean;
 	}
-	
-	private ArrayList<TipoproductoBean> crearDatos() {
-		ArrayList<TipoproductoBean>listaRandomTipoUsuario = new ArrayList<TipoproductoBean>();
-		String[]desc = {"Cuchillos","Navajas","Machetes"};
+
+	public ReplyBean crearDatos() throws Exception {
+		ReplyBean oReplyBean;
+		ConnectionInterface oConnectionPool = null;
+		Connection oConnection;
+		String[] desc = { "Cuchillos", "Navajas", "Machetes","Hachas" };
 		Random RandomDesc = new Random();
 		int numDeRegistrosCreados = 100;
-		TipoproductoBean oTipoproductoBean;
-		for(int i = 0 ; i < numDeRegistrosCreados; i++) {
-			oTipoproductoBean = new TipoproductoBean();
-			int randDesc = RandomDesc.nextInt(3);
-			oTipoproductoBean.setDesc(desc[randDesc]);
-			listaRandomTipoUsuario.add(oTipoproductoBean);
+		try {
+			String strJsonFromClient = oRequest.getParameter("json");
+			Gson oGson = new Gson();
+			TipoproductoBean oTipoproductoBean = new TipoproductoBean();
+			oTipoproductoBean = oGson.fromJson(strJsonFromClient, TipoproductoBean.class);
+			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+			oConnection = oConnectionPool.newConnection();
+			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
+			for (int i = 0; i < numDeRegistrosCreados; i++) {
+				oTipoproductoBean = new TipoproductoBean();
+				int randDesc = RandomDesc.nextInt(4);
+				oTipoproductoBean.setDesc(desc[randDesc]);
+				oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
+			}
+			oReplyBean = new ReplyBean(200, oGson.toJson("Tipoproductos creados correctamente"));
+		} catch (Exception ex) {
+			throw new Exception("ERROR: No entra", ex);
+		} finally {
+			oConnectionPool.disposeConnection();
 		}
-		return listaRandomTipoUsuario;
+		return oReplyBean;
 	}
 
 	public ReplyBean update() throws Exception {

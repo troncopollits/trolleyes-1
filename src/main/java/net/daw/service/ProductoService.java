@@ -30,7 +30,7 @@ public class ProductoService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		
+
 		try {
 			Integer id = Integer.parseInt(oRequest.getParameter("id"));
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
@@ -94,24 +94,15 @@ public class ProductoService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		// Lista que contendra los productos creados aleatoriamente
-		ArrayList<ProductoBean> listaProductoBean = new ArrayList<ProductoBean>();
 		try {
-			listaProductoBean = crearDatos();
-
-			// String strJsonFromClient = oRequest.getParameter("json");
+			String strJsonFromClient = oRequest.getParameter("json");
 			Gson oGson = new Gson();
 			ProductoBean oProductoBean = new ProductoBean();
-			// oProductoBean = oGson.fromJson(strJsonFromClient, ProductoBean.class);
+			oProductoBean = oGson.fromJson(strJsonFromClient, ProductoBean.class);
 			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
 			oConnection = oConnectionPool.newConnection();
 			ProductoDao oProductoDao = new ProductoDao(oConnection, ob);
-
-			for (ProductoBean productos : listaProductoBean) {
-				oProductoBean = oProductoDao.create(productos);
-			}
-			// oProductoBean = oProductoDao.create(oProductoBean);
-			// oReplyBean = new ReplyBean(200, oGson.toJson(oProductoBean));
+			oProductoBean = oProductoDao.create(oProductoBean);
 			oReplyBean = new ReplyBean(200, oGson.toJson("Productos creados correctamente"));
 		} catch (Exception ex) {
 			oReplyBean = new ReplyBean(500,
@@ -121,39 +112,53 @@ public class ProductoService {
 		}
 		return oReplyBean;
 	}
-	
+
 	// Metodo para crear varios productos de manera aleatoria
-	public ArrayList<ProductoBean> crearDatos() {
-		ArrayList<ProductoBean> listaRandomProducto = new ArrayList<ProductoBean>();
+	public ReplyBean crearDatos() throws Exception {
+		ReplyBean oReplyBean;
+		ConnectionInterface oConnectionPool = null;
+		Connection oConnection;
+		String[] desc = { "Cuchillo", "Navaja", "Tijera", "Hacha", "Machete", "Katana", "Lanza", "Espada", "Puñal",
+				"Estilete" };
+		Integer[] tipoProducto = { 252, 261, 276, 282, 300 };
+		String[] codigo = { "8a7ddff", "7as9d", "dasf77sf", "987dff", "cs9df", "1d7fsaf9", "7sdfw8ef", "68fsadf8",
+				"6asd7", "894xa9" };
 		Random randomDesc = new Random();
 		Random randomTipoProducto = new Random();
 		Random randomCodigo = new Random();
 		String foto = "foto";
-		ProductoBean oProductoBean;
 		int nuevosRegistros = 50;
+		try {
+			String strJsonFromClient = oRequest.getParameter("json");
+			Gson oGson = new Gson();
+			ProductoBean oProductoBean = new ProductoBean();
+			oProductoBean = oGson.fromJson(strJsonFromClient, ProductoBean.class);
+			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+			oConnection = oConnectionPool.newConnection();
+			ProductoDao oProductoDao = new ProductoDao(oConnection, ob);
+			for (int i = 0; i < nuevosRegistros; i++) {
+				oProductoBean = new ProductoBean();
+				int randDesc = randomDesc.nextInt(10);
+				int randTipoProducto = randomTipoProducto.nextInt(5);
+				int randCodigo = randomCodigo.nextInt(10);
+				int existencias = ThreadLocalRandom.current().nextInt(0, 3000 + 1);
+				double precio = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
 
-		String[] desc = { "Cuchillo", "Navaja", "Tijera", "Hacha", "Machete", "Katana", "Lanza", "Espada", "Puñal", "Estilete"};
-		Integer[] tipoProducto = { 160, 155, 170, 169, 157 };
-		String[] codigo = { "8a7ddff", "7as9d", "dasf77sf", "987dff", "cs9df", "1d7fsaf9", "7sdfw8ef", "68fsadf8",
-				"6asd7", "894xa9" };
-		for (int i = 0; i < nuevosRegistros; i++) {
-			oProductoBean = new ProductoBean();
-			int randDesc = randomDesc.nextInt(10);
-			int randTipoProducto = randomTipoProducto.nextInt(5);
-			int randCodigo = randomCodigo.nextInt(10);
-			int existencias = ThreadLocalRandom.current().nextInt(0, 3000 + 1);
-			double precio = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
-
-			oProductoBean.setCodigo(codigo[randCodigo]);
-			oProductoBean.setDesc(desc[randDesc]);
-			oProductoBean.setExistencias(existencias);
-			oProductoBean.setPrecio((float) precio);
-			oProductoBean.setFoto(foto);
-			oProductoBean.setId_tipoProducto(tipoProducto[randTipoProducto]);
-			listaRandomProducto.add(oProductoBean);
-
+				oProductoBean.setCodigo(codigo[randCodigo]);
+				oProductoBean.setDesc(desc[randDesc]);
+				oProductoBean.setExistencias(existencias);
+				oProductoBean.setPrecio((float) precio);
+				oProductoBean.setFoto(foto);
+				oProductoBean.setId_tipoProducto(tipoProducto[randTipoProducto]);
+				oProductoBean = oProductoDao.create(oProductoBean);
+			}
+			oReplyBean = new ReplyBean(200, oGson.toJson("Productos creados correctamente"));
+		} catch (Exception ex) {
+			throw new Exception("ERROR: No entra", ex);
+		} finally {
+			oConnectionPool.disposeConnection();
 		}
-		return listaRandomProducto;
+		return oReplyBean;
 	}
 
 	public ReplyBean update() throws Exception {

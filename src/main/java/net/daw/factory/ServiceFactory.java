@@ -40,6 +40,9 @@ public class ServiceFactory {
 			case "getpage":
 				oReplyBean = oTipousuarioService.getpage();
 				break;
+			case "crearDatos":
+				oReplyBean = oTipousuarioService.crearDatos();
+				break;
 			default:
 				oReplyBean = new ReplyBean(500, "Operation doesn't exist");
 				break;
@@ -65,6 +68,9 @@ public class ServiceFactory {
 				break;
 			case "getpage":
 				oReplyBean = oUsuarioService.getpage();
+				break;
+			case "crearDatos":
+				oReplyBean = oUsuarioService.crearDatos();
 				break;
 			case "login":
                 oReplyBean = oUsuarioService.login();
@@ -101,6 +107,9 @@ public class ServiceFactory {
 			case "getpage":
 				oReplyBean = oFacturaService.getpage();
 				break;
+			case "crearDatos":
+				oReplyBean = oFacturaService.crearDatos();
+				break;
 			default:
 				oReplyBean = new ReplyBean(500, "Operation doesn't exist");
 				break;
@@ -126,6 +135,9 @@ public class ServiceFactory {
 				break;
 			case "getpage":
 				oReplyBean = oLineaService.getpage();
+				break;
+			case "crearDatos":
+				oReplyBean = oLineaService.crearDatos();
 				break;
 			default:
 				oReplyBean = new ReplyBean(500, "Operation doesn't exist");
@@ -153,6 +165,9 @@ public class ServiceFactory {
 				break;
 			case "getpage":
 				oReplyBean = oProductoService.getpage();
+				break;
+			case "crearDatos":
+				oReplyBean = oProductoService.crearDatos();
 				break;
 			case "loaddata":
 				oReplyBean = oProductoService.loaddata();
@@ -182,6 +197,9 @@ public class ServiceFactory {
 				break;
 			case "getpage":
 				oReplyBean = oTipoproductoService.getpage();
+				break;
+			case "crearDatos":
+				oReplyBean = oTipoproductoService.crearDatos();
 				break;
 			default:
 				oReplyBean = new ReplyBean(500, "Operation doesn't exist");

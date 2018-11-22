@@ -8,6 +8,9 @@ package net.daw.service;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import javax.servlet.http.HttpServletRequest;
 import net.daw.bean.FacturaBean;
 import net.daw.bean.ReplyBean;
@@ -102,7 +105,7 @@ public class FacturaService {
 			oConnection = oConnectionPool.newConnection();
 			FacturaDao oFacturaDao = new FacturaDao(oConnection, ob);
 			oFacturaBean = oFacturaDao.create(oFacturaBean);
-			oReplyBean = new ReplyBean(200, oGson.toJson(oFacturaBean));
+			oReplyBean = new ReplyBean(200, oGson.toJson("Factura creada correctamente"));	
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
 		} finally {
@@ -111,6 +114,46 @@ public class FacturaService {
 		return oReplyBean;
 	}
 
+	public ReplyBean crearDatos() throws Exception {
+		ReplyBean oReplyBean;
+		ConnectionInterface oConnectionPool = null;
+		Connection oConnection;
+		
+		String[]fecha = {"27/02/96","26/02/96","25/02/96","24/02/96"};//4
+		int[]id_usuario = {105,120,129,170,164,198};//6
+		
+		Random randomFecha = new Random();
+		Random randomId_usuario = new Random();
+		int nuevosRegistros = 100;
+		try {
+			String strJsonFromClient = oRequest.getParameter("json");
+			Gson oGson = new Gson();
+			FacturaBean oFacturaBean = new FacturaBean();
+			oFacturaBean = oGson.fromJson(strJsonFromClient, FacturaBean.class);
+			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+			oConnection = oConnectionPool.newConnection();
+			FacturaDao oFacturaDao = new FacturaDao(oConnection, ob);
+			for(int i = 0; i < nuevosRegistros; i++) {
+				oFacturaBean = new FacturaBean();
+				int randFecha = randomFecha.nextInt(4);
+				double iva = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
+				int randId_usuario = randomId_usuario.nextInt(6);
+				
+				oFacturaBean.setFecha(fecha[randFecha]);
+				oFacturaBean.setIva(iva);
+				oFacturaBean.setId_usuario(id_usuario[randId_usuario]);
+				oFacturaBean = oFacturaDao.create(oFacturaBean);
+			}
+			oReplyBean = new ReplyBean(200, oGson.toJson("Facturas creadas correctamente"));	
+		} catch (Exception ex) {
+			throw new Exception("ERROR: No entra", ex);
+		} finally {
+			oConnectionPool.disposeConnection();
+		}
+		return oReplyBean;
+	}
+	
+	
 	public ReplyBean update() throws Exception {
 		int iRes = 0;
 		ReplyBean oReplyBean = null;
@@ -157,4 +200,6 @@ public class FacturaService {
 		return oReplyBean;
 
 	}
+
+
 }

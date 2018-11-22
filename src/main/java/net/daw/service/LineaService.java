@@ -8,6 +8,9 @@ package net.daw.service;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import javax.servlet.http.HttpServletRequest;
 import net.daw.bean.LineaBean;
 import net.daw.bean.ReplyBean;
@@ -17,7 +20,7 @@ import net.daw.dao.LineaDao;
 import net.daw.factory.ConnectionFactory;
 
 public class LineaService {
-    HttpServletRequest oRequest;
+	HttpServletRequest oRequest;
 	String ob = null;
 
 	public LineaService(HttpServletRequest oRequest) {
@@ -102,13 +105,53 @@ public class LineaService {
 			oConnection = oConnectionPool.newConnection();
 			LineaDao oLineaDao = new LineaDao(oConnection, ob);
 			oLineaBean = oLineaDao.create(oLineaBean);
-			oReplyBean = new ReplyBean(200, oGson.toJson(oLineaBean));
+			oReplyBean = new ReplyBean(200, oGson.toJson("Linea creada correctamente"));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
 		} finally {
 			oConnectionPool.disposeConnection();
 		}
 		return oReplyBean;
+	}
+
+	public ReplyBean crearDatos() throws Exception {
+		ReplyBean oReplyBean;
+		ConnectionInterface oConnectionPool = null;
+		Connection oConnection;
+		int[] id_producto = { 120, 134, 144, 150, 163 };
+		int[] id_factura = { 1, 2, 3, 4, 5 };
+		Random randomId_producto = new Random();
+		Random randomId_factura = new Random();
+		int nuevosRegistros = 100;
+
+		try {
+			String strJsonFromClient = oRequest.getParameter("json");
+			Gson oGson = new Gson();
+			LineaBean oLineaBean = new LineaBean();
+			oLineaBean = oGson.fromJson(strJsonFromClient, LineaBean.class);
+			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+			oConnection = oConnectionPool.newConnection();
+			LineaDao oLineaDao = new LineaDao(oConnection, ob);
+
+			for (int i = 0; i < nuevosRegistros; i++) {
+				oLineaBean = new LineaBean();
+				int randId_producto = randomId_producto.nextInt(5);
+				int randId_factura = randomId_factura.nextInt(5);
+				int cantidad = ThreadLocalRandom.current().nextInt(0, 3000 + 1);
+
+				oLineaBean.setCantidad(cantidad);
+				oLineaBean.setId_factura(id_factura[randId_factura]);
+				oLineaBean.setId_producto(id_producto[randId_producto]);
+				oLineaBean = oLineaDao.create(oLineaBean);
+			}
+			oReplyBean = new ReplyBean(200, oGson.toJson("Lineas creadas correctamente"));
+		} catch (Exception ex) {
+			throw new Exception("ERROR: No entra", ex);
+		} finally {
+			oConnectionPool.disposeConnection();
+		}
+		return oReplyBean;
+
 	}
 
 	public ReplyBean update() throws Exception {
@@ -125,8 +168,8 @@ public class LineaService {
 			oConnection = oConnectionPool.newConnection();
 			LineaDao oLineaDao = new LineaDao(oConnection, ob);
 			iRes = oLineaDao.update(oLineaBean);
-			//oReplyBean.setStatus(200);
-			//oReplyBean.setJson(Integer.toString(iRes));
+			// oReplyBean.setStatus(200);
+			// oReplyBean.setJson(Integer.toString(iRes));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
 		} finally {
