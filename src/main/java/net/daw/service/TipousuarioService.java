@@ -148,25 +148,25 @@ public class TipousuarioService {
 
 	public ReplyBean update() throws Exception {
 		int iRes = 0;
-		ReplyBean oReplyBean;
-		ConnectionInterface oConnectionPool = null;
-		Connection oConnection;
-		try {
-			String strJsonFromClient = oRequest.getParameter("json");
-			Gson oGson = new Gson();
-			TipousuarioBean oTipousuarioBean = new TipousuarioBean();
-			oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);
-			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
-			oConnection = oConnectionPool.newConnection();
-			TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
-			iRes = oTipousuarioDao.update(oTipousuarioBean);
-			oReplyBean = new ReplyBean(200, Integer.toString(iRes));
-		} catch (Exception ex) {
-			throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
-		} finally {
-			oConnectionPool.disposeConnection();
-		}
-		return oReplyBean;
+        ReplyBean oReplyBean;
+        ConnectionInterface oConnectionPool = null;
+        Connection oConnection;
+        try {
+            String strJsonFromClient = oRequest.getParameter("json");
+            Gson oGson = new Gson();
+            TipousuarioBean oTipousuarioBean = new TipousuarioBean();
+            oTipousuarioBean = oGson.fromJson(strJsonFromClient, TipousuarioBean.class);
+            oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+            oConnection = oConnectionPool.newConnection();
+            TipousuarioDao oTipousuarioDao = new TipousuarioDao(oConnection, ob);
+            iRes = oTipousuarioDao.update(oTipousuarioBean);
+            oReplyBean = new ReplyBean(200, Integer.toString(iRes));
+        } catch (Exception ex) {
+            throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
+        } finally {
+            oConnectionPool.disposeConnection();
+        }
+        return oReplyBean;
 	}
 
 	public ReplyBean getpage() throws Exception {

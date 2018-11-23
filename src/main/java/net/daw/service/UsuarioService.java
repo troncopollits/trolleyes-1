@@ -207,31 +207,31 @@ public class UsuarioService {
 	}
 
 	public ReplyBean update() throws Exception {
-		int iRes = 0;
-		ReplyBean oReplyBean;
-		ConnectionInterface oConnectionPool = null;
-		Connection oConnection;
-		// if (this.checkPermission("get")) {
-		try {
-			String strJsonFromClient = oRequest.getParameter("json");
-			Gson oGson = new Gson();
-			UsuarioBean oUsuarioBean = new UsuarioBean();
-			oUsuarioBean = oGson.fromJson(strJsonFromClient, UsuarioBean.class);
-			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
-			oConnection = oConnectionPool.newConnection();
-			UsuarioDao oUsuarioDao = new UsuarioDao(oConnection, ob);
-			iRes = oUsuarioDao.update(oUsuarioBean);
-			oReplyBean = new ReplyBean(200, Integer.toString(iRes));
-		} catch (Exception ex) {
-			throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
-		} finally {
-			oConnectionPool.disposeConnection();
-		}
-		// } else {
-		// oReplyBean = new ReplyBean(401, "Unauthorized");
-		// }
-		return oReplyBean;
-	}
+        int iRes = 0;
+        ReplyBean oReplyBean;
+        ConnectionInterface oConnectionPool = null;
+        Connection oConnection;
+       // if (this.checkPermission("update")) {
+            try {
+                String strJsonFromClient = oRequest.getParameter("json");
+                Gson oGson = (new GsonBuilder()).excludeFieldsWithoutExposeAnnotation().create();
+                UsuarioBean oUsuarioBean = new UsuarioBean();
+                oUsuarioBean = oGson.fromJson(strJsonFromClient, UsuarioBean.class);
+                oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+                oConnection = oConnectionPool.newConnection();
+                UsuarioDao oUsuarioDao = new UsuarioDao(oConnection, ob);
+                iRes = oUsuarioDao.update(oUsuarioBean);
+                oReplyBean = new ReplyBean(200, Integer.toString(iRes));
+            } catch (Exception ex) {
+                throw new Exception("ERROR: Service level: update method: " + ob + " object", ex);
+            } finally {
+                oConnectionPool.disposeConnection();
+            }
+        //} else {
+          //  oReplyBean = new ReplyBean(401, "Unauthorized");
+        //}
+        return oReplyBean;
+    }
 
 	public ReplyBean getpage() throws Exception {
 		ReplyBean oReplyBean;

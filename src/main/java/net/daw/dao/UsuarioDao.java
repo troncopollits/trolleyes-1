@@ -142,19 +142,11 @@ public class UsuarioDao {
 
     public int update(UsuarioBean oUsuarioBean) throws Exception {
         int iResult = 0;
-        String strSQL = "UPDATE " + ob + " SET dni = ?, nombre = ?, ape1 = ?, ape2 = ?, login = ?, pass = ?, id_tipoUsuario = ? WHERE id = ? ;";
-
+        String strSQL = "UPDATE " + ob + " SET ";
+        strSQL += oUsuarioBean.getPairs();
         PreparedStatement oPreparedStatement = null;
         try {
             oPreparedStatement = oConnection.prepareStatement(strSQL);
-            oPreparedStatement.setString(1, oUsuarioBean.getDni());
-            oPreparedStatement.setString(2, oUsuarioBean.getNombre());
-            oPreparedStatement.setString(3, oUsuarioBean.getApe1());
-            oPreparedStatement.setString(4, oUsuarioBean.getApe2());
-            oPreparedStatement.setString(5, oUsuarioBean.getLogin());
-            oPreparedStatement.setString(6, oUsuarioBean.getPass());
-            oPreparedStatement.setInt(7, oUsuarioBean.getId_tipoUsuario());
-            oPreparedStatement.setInt(8, oUsuarioBean.getId());
             iResult = oPreparedStatement.executeUpdate();
 
         } catch (SQLException e) {
