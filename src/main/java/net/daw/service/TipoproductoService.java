@@ -108,6 +108,7 @@ public class TipoproductoService {
 			oConnection = oConnectionPool.newConnection();
 			TipoproductoDao oTipoproductoDao = new TipoproductoDao(oConnection, ob);
 			oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
+			oTipoproductoBean = oTipoproductoDao.create(oTipoproductoBean);
 			oReplyBean = new ReplyBean(200, oGson.toJson("Tipoproductos creados correctamente"));
 
 		} catch (Exception ex) {

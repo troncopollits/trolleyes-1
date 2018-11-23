@@ -21,10 +21,6 @@ import net.daw.constant.ConnectionConstants;
 import net.daw.dao.UsuarioDao;
 import net.daw.factory.ConnectionFactory;
 
-/**
- *
- * @author jesus
- */
 public class UsuarioService {
 	HttpServletRequest oRequest;
 	String ob = null;
@@ -35,7 +31,6 @@ public class UsuarioService {
 		ob = oRequest.getParameter("ob");
 	}
 
-	// Check para confirmar si estamos logueados
 	protected Boolean checkPermission(String strMethodName) {
 		UsuarioBean oUsuarioBean = (UsuarioBean) oRequest.getSession().getAttribute("user");
 		if (oUsuarioBean != null) {
@@ -49,24 +44,25 @@ public class UsuarioService {
 		ReplyBean oReplyBean;
 		ConnectionInterface oConnectionPool = null;
 		Connection oConnection;
-		// if (this.checkPermission("get")) {
-		try {
-			Integer id = Integer.parseInt(oRequest.getParameter("id"));
-			oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
-			oConnection = oConnectionPool.newConnection();
-			UsuarioDao oUsuarioDao = new UsuarioDao(oConnection, ob);
-			UsuarioBean oUsuarioBean = oUsuarioDao.get(id);
-			Gson oGson = new Gson();
-			oReplyBean = new ReplyBean(200, oGson.toJson(oUsuarioBean));
-		} catch (Exception ex) {
-			throw new Exception("ERROR: Service level: get method: " + ob + " object", ex);
-		} finally {
-			oConnectionPool.disposeConnection();
-		}
-		// } else {
-		// oReplyBean = new ReplyBean(401, "Unauthorized");
 
-		// }
+		//if (this.checkPermission("get")) {
+			try {
+				Integer id = Integer.parseInt(oRequest.getParameter("id"));
+				oConnectionPool = ConnectionFactory.getConnection(ConnectionConstants.connectionPool);
+				oConnection = oConnectionPool.newConnection();
+				UsuarioDao oUsuarioDao = new UsuarioDao(oConnection, ob);
+				UsuarioBean oUsuarioBean = oUsuarioDao.get(id);
+				Gson oGson = new Gson();
+				oReplyBean = new ReplyBean(200, oGson.toJson(oUsuarioBean));
+			} catch (Exception ex) {
+				throw new Exception("ERROR: Service level: get method: " + ob + " object", ex);
+			} finally {
+				oConnectionPool.disposeConnection();
+			}
+		//} else {
+			//oReplyBean = new ReplyBean(401, "Unauthorized");
+
+		//}
 		return oReplyBean;
 
 	}
@@ -153,13 +149,20 @@ public class UsuarioService {
 				"98464987S", "98432112L", "89489732F", "46841354B" };// 11
 		String[] nombre = { "Arturo", "Antonio", "Jose", "Benjamin", "Parrales", "Pepa", "Xavi", "David", "Berengario",
 				"Andrés", "Maria" };// 11
+
 		String[] ape1 = { "Sendra", "Garcia", "De la Reina", "Otras Hierbas", "Murillo", "Franklin", "De la Vega",
 				"Lorca", "Pajares", "Abascal", "Gandhi" };// 11
 		String[] ape2 = { "Bisquert", "Garcia", "Marquez", "Llamas", "Monzonis", "Perez", "Reverte", "Santacreu",
 				"Ortega", "Ahuir", "Naranjo" };// 11
+
 		String[] login = { "XXX", "SeñorX", "El Pipa", "Judas", "CJ", "Thompson", "Antoniet", "Bacalo", "Palleter",
 				"Botella", "Julay" };// 11
+
 		String[] pass = { "abc", "def", "ghi", "jkl", "mnn", "opq", "rst", "uvw", "xyz", "123", "456" };// 11
+
+		
+		int[] id_tipoUsuario = { 5,8,7,6,20};
+		int numUsuarioCreados = 100;
 		Random randDni = new Random();
 		Random randNombre = new Random();
 		Random randApe1 = new Random();
@@ -167,8 +170,6 @@ public class UsuarioService {
 		Random randLogin = new Random();
 		Random randPass = new Random();
 		Random randId_tipoUsuario = new Random();
-		int[] id_tipoUsuario = { 618, 620, 633, 625, 640 };
-		int numUsuarioCreados = 100;
 
 		try {
 			String strJsonFromClient = oRequest.getParameter("json");

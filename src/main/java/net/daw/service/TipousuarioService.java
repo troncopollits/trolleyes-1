@@ -95,6 +95,7 @@ public class TipousuarioService {
 		ConnectionInterface oConnectionPool = null;// Simple conexion con la bbdd.
 		Connection oConnection;// Simple conexion con la bbdd.
 		try {
+
 			String strJsonFromClient = oRequest.getParameter("json");// Esta es la puta operacion('op'), la recogemos.
 			Gson oGson = new Gson();
 			TipousuarioBean oTipousuarioBean = new TipousuarioBean();
@@ -106,7 +107,8 @@ public class TipousuarioService {
 																					// programa, entonces siempre viaja
 																					// entre clases
 			oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);// El objeto 'ob' es el nombre de la tabla donde
-																		// se ejecutará la consulta, que será en DAO.
+																		// se ejecutará la consulta, que será en DAO.	
+		oTipousuarioBean = oTipousuarioDao.create(oTipousuarioBean);//El objeto 'ob' es el nombre de la tabla donde se ejecutarï¿½ la consulta, que serï¿½ en DAO.
 			oReplyBean = new ReplyBean(200, oGson.toJson("Tipousuarios creados correctamente"));
 		} catch (Exception ex) {
 			throw new Exception("ERROR: Service level: create method: " + ob + " object", ex);
@@ -145,7 +147,6 @@ public class TipousuarioService {
 		}
 		return oReplyBean;
 	}
-
 	public ReplyBean update() throws Exception {
 		int iRes = 0;
         ReplyBean oReplyBean;

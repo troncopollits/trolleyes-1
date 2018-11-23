@@ -123,6 +123,8 @@ public class ProductoService {
 		Connection oConnection;
 		String[] desc = { "Cuchillo", "Navaja", "Tijera", "Hacha", "Machete", "Katana", "Lanza", "Espada", "Puñal",
 				"Estilete" };
+		Integer[] tipoProducto = { 160, 155, 170, 169, 157 };
+
 		String[] codigo = { "8a7ddff", "7as9d", "dasf77sf", "987dff", "cs9df", "1d7fsaf9", "7sdfw8ef", "68fsadf8",
 				"6asd7", "894xa9" };
 		int[] id_tipoProducto = {252, 261, 276, 282, 300};
@@ -217,6 +219,5 @@ public class ProductoService {
         }
 
         return oReplyBean;
-
-    }
+	}
 }

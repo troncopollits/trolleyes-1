@@ -23,13 +23,13 @@ import net.daw.helper.SqlBuilder;
 public class ProductoDao {
 
     Connection oConnection;
-    String ob = null;
+	String ob = null;
 
-    public ProductoDao(Connection oConnection, String ob) {
-        super();
-        this.oConnection = oConnection;
-        this.ob = ob;
-    }
+	public ProductoDao(Connection oConnection, String ob) {
+		super();
+		this.oConnection = oConnection;
+		this.ob = ob;
+	}
 
     public ProductoBean get(int id, Integer expand) throws Exception {
         String strSQL = "SELECT * FROM " + ob + " WHERE id=?";
@@ -45,7 +45,6 @@ public class ProductoDao {
                 oProductoBean = new ProductoBean();
 
                 oProductoBean.fill(oResultSet, oConnection, expand);
-
             } else {
                 oProductoBean = null;
             }
@@ -60,6 +59,27 @@ public class ProductoDao {
             }
         }
         return oProductoBean;
+    }
+
+    public int update(ProductoBean oProductoBean) throws Exception {
+        int iResult = 0;
+        //String strSQL = "UPDATE " + ob + " SET " + ob + ".codigo = ?,  " + ob + ".desc = ?,  " + ob + ".existencias = ?, " + ob + ".precio = ?, " + ob + ".foto = ?, " + ob + ".id_tipoProducto = ?  WHERE  " + ob + ".id = ?;";
+        String strSQL = "UPDATE " + ob + " SET ";
+        strSQL += oProductoBean.getPairs();
+        
+        PreparedStatement oPreparedStatement = null;
+        try {
+            oPreparedStatement = oConnection.prepareStatement(strSQL);
+            iResult = oPreparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new Exception("Error en Dao update de " + ob, e);
+        } finally {
+            if (oPreparedStatement != null) {
+                oPreparedStatement.close();
+            }
+        }
+        return iResult;
     }
 
     public int remove(int id) throws Exception {
@@ -134,27 +154,7 @@ public class ProductoDao {
         return oProductoBean;
     }
 
-    public int update(ProductoBean oProductoBean) throws Exception {
-        int iResult = 0;
-        //String strSQL = "UPDATE " + ob + " SET " + ob + ".codigo = ?,  " + ob + ".desc = ?,  " + ob + ".existencias = ?, " + ob + ".precio = ?, " + ob + ".foto = ?, " + ob + ".id_tipoProducto = ?  WHERE  " + ob + ".id = ?;";
-        String strSQL = "UPDATE " + ob + " SET ";
-        strSQL += oProductoBean.getPairs();
-        
-        PreparedStatement oPreparedStatement = null;
-        try {
-            oPreparedStatement = oConnection.prepareStatement(strSQL);
-            iResult = oPreparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new Exception("Error en Dao update de " + ob, e);
-        } finally {
-            if (oPreparedStatement != null) {
-                oPreparedStatement.close();
-            }
-        }
-        return iResult;
-    }
-
+    
     public ArrayList<ProductoBean> getpage(int iRpp, int iPage, HashMap<String, String> hmOrder, Integer expand) throws Exception {
         String strSQL = "SELECT * FROM " + ob;
         strSQL += SqlBuilder.buildSqlOrder(hmOrder);
